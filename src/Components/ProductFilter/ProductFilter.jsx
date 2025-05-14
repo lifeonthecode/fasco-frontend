@@ -1,5 +1,14 @@
+import { useState } from "react";
 
 const ProductFilter = () => {
+
+    const [activeFilter, setActiveFilter] = useState({
+        size: '',
+        color: '',
+        price: '',
+        brand: '',
+        collection: ''
+    })
 
     const productSizes = [
         {
@@ -122,7 +131,9 @@ const ProductFilter = () => {
             name: 'accessories',
             collection: 'accessories',
         }
-    ]
+    ];
+
+    console.log('activeFilter', activeFilter);
 
     return (
         <div className="flex flex-col gap-8 max-w-[300px] w-full max-h-[1112px] h-full p-5 border-[1px] border-[#8a8a8a] rounded-lg">
@@ -133,7 +144,17 @@ const ProductFilter = () => {
                 <div className="flex flex-wrap gap-3">
                     {
                         productSizes?.map((sizeItem) => (
-                            <button key={sizeItem?.id} className="text-[#8a8a8a] text-base w-[42px] h-[42px] flex items-center justify-center border-[1px] border-[#8a8a8a] rounded-lg cursor-pointer capitalize">{sizeItem?.size}</button>
+                            <button
+                                key={sizeItem?.id}
+                                className={`text-[#8a8a8a] text-base w-[42px] h-[42px] flex items-center justify-center border-[2px] border-[#8a8a8a] rounded-lg cursor-pointer capitalize ${activeFilter?.size === sizeItem?.size && 'border-red-500 border-[4px]'}`}
+                                onClick={() => setActiveFilter({
+                                    ...activeFilter,
+                                    size: sizeItem?.size
+                                    ,
+                                })}
+                            >
+                                {sizeItem?.size}
+                            </button>
                         ))
                     }
                 </div>
@@ -145,9 +166,17 @@ const ProductFilter = () => {
                 <div className="flex flex-wrap gap-3">
                     {
                         productColors?.map((colorItem) => (
-                            <button key={colorItem?.id} className={`w-[40px] h-[40px] rounded-full cursor-pointer`} style={{
-                                backgroundColor: `#${colorItem?.color}`
-                            }}></button>
+                            <button
+                                key={colorItem?.id}
+                                className={`w-[40px] h-[40px] rounded-full cursor-pointer ${activeFilter?.color === colorItem?.color && 'border-[5px] border-red-500'}`}
+                                style={{
+                                    backgroundColor: `#${colorItem?.color}`
+                                }}
+                                onClick={() => setActiveFilter({
+                                    ...activeFilter,
+                                    color: colorItem?.color
+                                })}
+                            ></button>
                         ))
                     }
                 </div>
@@ -159,7 +188,14 @@ const ProductFilter = () => {
                 <div className="flex flex-col items-start gap-3">
                     {
                         productPrices?.map((priceItem) => (
-                            <button key={priceItem?.id} className="text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer">{priceItem?.price}</button>
+                            <button
+                                key={priceItem?.id}
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.price === priceItem?.price && 'text-red-500 underline'}`}
+                                onClick={() => setActiveFilter({
+                                    ...activeFilter,
+                                    price: priceItem?.price
+                                })}
+                            >{priceItem?.price}</button>
                         ))
                     }
                 </div>
@@ -167,11 +203,18 @@ const ProductFilter = () => {
 
             {/* brands box  */}
             <div className="flex flex-col gap-4">
-                <h4  className="text-lg text-black font-normal capitalize">brands</h4>
-                <div  className="flex flex-col items-start gap-3">
+                <h4 className="text-lg text-black font-normal capitalize">brands</h4>
+                <div className="flex flex-col items-start gap-3">
                     {
                         productBrands?.map((brandItem) => (
-                            <button key={brandItem?.id} className="text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer">{brandItem?.brand}</button>
+                            <button
+                                key={brandItem?.id}
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.brand === brandItem?.brand && 'text-red-500 underline'}`}
+                                onClick={() => setActiveFilter({
+                                    ...activeFilter,
+                                    brand: brandItem?.brand
+                                })}
+                            >{brandItem?.brand}</button>
                         ))
                     }
                 </div>
@@ -180,10 +223,17 @@ const ProductFilter = () => {
             {/* collections box  */}
             <div className="flex flex-col gap-4">
                 <h4 className="text-lg text-black font-normal capitalize">collections</h4>
-                <div  className="flex flex-col items-start gap-3">
+                <div className="flex flex-col items-start gap-3">
                     {
                         productCollections?.map((collectionItem) => (
-                            <button key={collectionItem?.id} className="text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer">{collectionItem?.name}</button>
+                            <button 
+                            key={collectionItem?.id} 
+                            className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize ${activeFilter?.collection === collectionItem?.collection && 'text-red-500 underline'}`}
+                            onClick={() => setActiveFilter({
+                                    ...activeFilter,
+                                    collection: collectionItem?.collection
+                                })}
+                            >{collectionItem?.name}</button>
                         ))
                     }
                 </div>

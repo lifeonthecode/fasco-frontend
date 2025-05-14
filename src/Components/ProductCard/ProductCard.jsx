@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const ProductCard = ({ products }) => {
     return (
@@ -19,18 +20,25 @@ const ProductCard = ({ products }) => {
                         <div className='flex flex-col gap-3'>
                             <h4 className='text-2xl text-black font-normal capitalize'>{product?.productName}</h4>
                             <p className='text-base text-black font-poppins font-normal capitalize'>${product?.price}</p>
-                            <div className='flex items-center gap-3'>
-                                {
-                                    product?.color?.map((colorItem) => (
-                                        <button
-                                            key={colorItem?.id}
-                                            className='w-[26px] h-[26px] rounded-full cursor-pointer'
-                                            style={{
-                                                backgroundColor: colorItem?.color
-                                            }}
-                                        ></button>
-                                    ))
-                                }
+                            <div className='flex items-center justify-between gap-3'>
+                                <div>
+                                    {
+                                        product?.color?.map((colorItem) => (
+                                            <button
+                                                key={colorItem?.id}
+                                                className='w-[26px] h-[26px] rounded-full cursor-pointer'
+                                                style={{
+                                                    backgroundColor: colorItem?.color
+                                                }}
+                                            ></button>
+                                        ))
+                                    }
+                                </div>
+
+                                <div>
+                                    <Link to={`/products/${product?.productId}`} className='text-base text-black font-poppins font-medium capitalize border-b-2 border-[#484848]'>view details</Link>
+                                </div>
+
                             </div>
                         </div>
                     </div>

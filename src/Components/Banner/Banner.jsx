@@ -19,7 +19,7 @@ const Banner = () => {
                         <div className="text-center">
                             <h3 className="text-[#484848] text-[75px] font-poppins font-medium uppercase">ultimate <br /> <span className="text-white text-stroke text-[145px]">sale</span></h3>
                             <p className="text-[#484848] text-xl font-normal font-poppins uppercase mb-5">new collection</p>
-                            <Link to={''} className="text-white font-poppins font-medium px-6 py-2.5 bg-black rounded-lg inline-block text-xl uppercase mb-8">shop now</Link>
+                            <Link to={'/products'} className="text-white font-poppins font-medium px-6 py-2.5 bg-black rounded-lg inline-block text-xl uppercase mb-8">shop now</Link>
                         </div>
 
                         <div className="min-h-[150px] h-full w-full">

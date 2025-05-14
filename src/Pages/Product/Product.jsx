@@ -1,30 +1,31 @@
 import { useState } from "react";
 import ProductFilter from "../../Components/ProductFilter/ProductFilter";
 import { CiGrid2V, CiGrid41, CiGrid31 } from "react-icons/ci";
-import ProductCard from "../../Components/ProductCard/ProductCard";
+import ProductCard from './../../Components/ProductCard/ProductCard';
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 const Product = () => {
 
     const [activeGrid, setActiveGrid] = useState({
-        column: '3',
+        grid: 'grid-cols-3',
         id: 2
     }) // initial state for active grid
 
     const gridLayout = [
         {
             id: 1,
-            column: '2',
+            grid: 'grid-cols-2',
             icon: <CiGrid2V size={'1.5rem'} color="black" />,
 
         },
         {
             id: 2,
-            column: '3',
+            grid: 'grid-cols-3',
             icon: <CiGrid31 size={'1.5rem'} color="black" />,
 
         },
         {
             id: 3,
-            column: '4',
+            grid: 'grid-cols-4',
             icon: <CiGrid41 size={'1.5rem'} color="black" />,
 
         },
@@ -209,7 +210,7 @@ const Product = () => {
     console.log('activeGrid', activeGrid);
 
     return (
-        <div>
+        <div className="w-full pt-[50px]">
             <div className="lg:container mx-auto">
                 {/* section header  */}
                 <div className="pb-[100px] w-full flex items-center justify-center">
@@ -218,7 +219,7 @@ const Product = () => {
 
 
                 {/* product wrapper */}
-                <div className="flex justify-between gap-10">
+                <div className="flex justify-between gap-10 pb-[70px]">
                     {/* filter wrapper  */}
                     <ProductFilter />
 
@@ -236,7 +237,7 @@ const Product = () => {
                                             key={gridItem?.id}
                                             className={`w-[42px] h-[42px] flex items-center justify-center rounded-sm cursor-pointer bg-[#f2f2f2] text-black ${activeGrid?.id === gridItem?.id && 'border-[2px] border-red-500'}`}
                                             onClick={() => setActiveGrid({
-                                                column:gridItem?.column,
+                                                grid:gridItem?.grid,
                                                 id: gridItem?.id
                                             })}
                                             >
@@ -248,9 +249,24 @@ const Product = () => {
                         </div>
 
                         {/* product grid  */}
-                        <div className={`grid grid-cols-${activeGrid.column} gap-6`}>
+                        <div className={`grid ${activeGrid.grid} gap-6`}>
                             <ProductCard products={products} />
                         </div>
+                    </div>
+                </div>
+
+                {/* pagination wrapper  */}
+                <div className="flex items-center justify-center pb-[70px]">
+                    <div className="flex items-center gap-5">
+                        <button className="w-[56px] h-[56px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowBack size={'1.5rem'} color="black" /></button>
+                        <div className="flex items-center gap-5">
+                            {
+                                [...Array(5)]?.map((_, index) => (
+                                    <button className="text-xl text-black font-medium w-[40px] h-[40px] flex items-center justify-center cursor-pointer" key={index}>{index+1}</button>
+                                ))
+                            }
+                        </div>
+                        <button className="w-[56px] h-[56px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowForward size={'1.5rem'} color="black" /></button>
                     </div>
                 </div>
             </div>
