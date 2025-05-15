@@ -54,7 +54,7 @@ const Navbar = () => {
                                 </div>
                                 {/* cart box  */}
                                 <div>
-                                    <Link className='cursor-pointer'><BsMinecartLoaded size={'1.5rem'} color='#484848' /></Link>
+                                    <Link to={'/cart'} className='cursor-pointer'><BsMinecartLoaded size={'1.5rem'} color='#484848' /></Link>
                                 </div>
                             </div>
                         )

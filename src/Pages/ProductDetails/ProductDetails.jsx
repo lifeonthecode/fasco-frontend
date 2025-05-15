@@ -119,7 +119,7 @@ const ProductDetails = () => {
                                             item?.images?.map((imageItem, index) => (
                                                 <button onClick={() => setActiveImage({
                                                     imageIndex: index
-                                                })} className={`cursor-pointer ${activeImage.imageIndex === index && 'border-[4px] border-red-500'}`}>
+                                                })} className={`cursor-pointer ${activeImage.imageIndex === index && 'border-[4px] border-red-500'}`} key={index}>
 
                                                     <img src={imageItem?.image} className='w-[70px] h-[93px] object-cover' alt={imageItem?.id} />
                                                 </button>
@@ -169,7 +169,7 @@ const ProductDetails = () => {
                                                         key={sizeItem?.id}
                                                         className='w-[45px] h-[45px] bg-[#eeeeee] rounded-lg flex items-center justify-center border-[#eeeeee] border-[2px] cursor-pointer'
                                                         onClick={() => selectProduct({
-                                                            ...selectProduct,
+                                                            ...selectedProduct,
                                                             size: sizeItem?.size
                                                         })}
                                                     >{sizeItem?.size}</button>
