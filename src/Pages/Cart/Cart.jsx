@@ -188,7 +188,7 @@ const Cart = () => {
                         {/* checkout box  */}
                         <div>
                             <button className="mt-5 w-full h-[56px] bg-black rounded-2xl cursor-pointer">
-                                <Link to={'/checkout'} className="text-xl text-white font-medium font-poppins capitalize w-full h-full">got to checkout</Link>
+                                <Link to={'/checkout'} className="text-xl text-white font-medium font-poppins capitalize w-full h-full">go to checkout</Link>
                             </button>
                         </div>
                     </div>
