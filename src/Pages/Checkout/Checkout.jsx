@@ -54,6 +54,8 @@ const Checkout = () => {
                         </div>
                     </div>
                     {/* right side wrapper  */}
+
+                    {/* right side wrapper. i will first create backend side and then create payment ui  */}
                 </div>
             </div>
         </div>

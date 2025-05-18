@@ -18,14 +18,15 @@ const Navbar = () => {
                     {/* navbar  */}
                     {
 
-                        location?.pathname === '/' ? (
+                        location?.pathname === '/' || (location?.pathname === '/login' || location?.pathname === '/register' || location?.pathname === '/forget-password' || location?.pathname === '/confirmation-code' || location?.pathname === '/new-password' ) ? (
                             <nav className='flex items-center gap-[3.5rem]'>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>home</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>deals</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>new arrivals</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>packages</NavLink>
-                                <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins block'>sign in</NavLink>
-                                <NavLink to={'/'} className='text-base capitalize font-normal font-poppins px-6 py-2.5 bg-black text-white rounded-lg'>sign up</NavLink>
+                                <NavLink to={'/login'} className='text-base text-[#484848] capitalize font-normal font-poppins block'>sign in</NavLink>
+
+                                <NavLink to={'/register'} className='text-base capitalize font-normal font-poppins px-6 py-2.5 bg-black text-white rounded-lg'>sign up</NavLink>
                             </nav>
                         )
                             : (
