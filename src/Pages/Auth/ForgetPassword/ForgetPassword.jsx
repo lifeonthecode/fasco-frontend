@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { forgetPassword } from '../../../App/Features/User/userSlice';
 
 const ForgetPassword = () => {
+    const dispatch = useDispatch()
+    const emailRef = useRef()
 
     const navigate = useNavigate()
-    const handleForgetPassword = () => {
-        navigate('/confirmation-code')
+
+    
+    const handleForgetPassword = async (e) => {
+        e.preventDefault()
+        const userData = {
+            email: emailRef.current.value,
+        }
+        try {
+
+            const response = await dispatch(forgetPassword(userData)).unwrap();
+            toast.success(response.message, {
+                position: 'top-right'
+            });
+            console.log('response: ', response)
+            // clear ui data 
+            emailRef.current.value = '';
+
+            // let's go confirmation code page
+            navigate(`/confirmation-code/${response.userId}`)
+
+        } catch (error) {
+
+            toast.error(error.message, {
+                position: 'top-right'
+            });
+        }
+
     }
 
     return (
@@ -24,7 +54,7 @@ const ForgetPassword = () => {
                         <form onSubmit={handleForgetPassword} className='w-full h-auto flex flex-col gap-4.5 items-center'>
                             {/* input box email  */}
                             <div className='w-full h-[47px] border-b-[2px] border-[#9d9d9d]'>
-                                <input className='w-full h-full border-none outline-0' type="email" placeholder='Enter your email...' required />
+                                <input ref={emailRef} className='w-full h-full border-none outline-0' type="email" placeholder='Enter your email...' required />
                             </div>
                             <div className='w-full h-auto flex items-center justify-center'>
 
@@ -34,8 +64,8 @@ const ForgetPassword = () => {
                         </form>
                         <div className='w-full h-auto flex flex-col items-center justify-center mt-8 gap-4.5'>
 
-                            
-                            <p className='max-w-[575px] w-full text-black flex items-center gap-3 justify-center'>Already have an account? <Link  to={'/login'} className='text-lg font-poppins font-normal capitalize flex items-center justify-center cursor-pointer text-[#5b86e5]'>Login</Link></p>
+
+                            <p className='max-w-[575px] w-full text-black flex items-center gap-3 justify-center'>Already have an account? <Link to={'/login'} className='text-lg font-poppins font-normal capitalize flex items-center justify-center cursor-pointer text-[#5b86e5]'>Login</Link></p>
                         </div>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ const Navbar = () => {
                     {/* navbar  */}
                     {
 
-                        location?.pathname === '/' || (location?.pathname === '/login' || location?.pathname === '/register' || location?.pathname === '/forget-password' || location?.pathname === '/confirmation-code' || location?.pathname === '/new-password' ) ? (
+                        location?.pathname === '/' || (location?.pathname === '/login' || location?.pathname === '/register' || location?.pathname === '/forget-password' || location?.pathname === '/confirmation-code' || location?.pathname === '/new-password') ? (
                             <nav className='flex items-center gap-[3.5rem]'>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>home</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>deals</NavLink>
@@ -31,9 +31,9 @@ const Navbar = () => {
                         )
                             : (
                                 <nav className='flex items-center gap-[3.5rem]'>
-                                <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>home</NavLink>
-                                <NavLink to={'/products'} className='text-base text-[#484848] capitalize font-normal font-poppins'>shop</NavLink>
-                            </nav>
+                                    <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>home</NavLink>
+                                    <NavLink to={'/products'} className='text-base text-[#484848] capitalize font-normal font-poppins'>shop</NavLink>
+                                </nav>
                             )
 
                     }
@@ -47,7 +47,17 @@ const Navbar = () => {
                                 </div>
                                 {/* user box  */}
                                 <div>
-                                    <Link  className='cursor-pointer'><FaUser size={'1.5rem'} color='#484848' /></Link>
+
+
+                                    <div className="dropdown">
+                                        <div tabIndex={0} role="button">
+                                            <button className='cursor-pointer'><FaUser size={'1.5rem'} color='#484848' /></button>
+                                        </div>
+                                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                            <li><a>Item 1</a></li>
+                                            <li><a>Item 2</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 {/* wishlist box  */}
                                 <div>

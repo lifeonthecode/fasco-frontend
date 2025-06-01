@@ -1,0 +1,240 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../../Api/axiosInstance";
+
+
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+    const response = await axiosInstance.get('/user/get-users');
+    return response.data;
+});
+export const fetchSingleUser = createAsyncThunk('users/fetchSingleUser', async () => {
+    const response = await axiosInstance.get('/user/get-user');
+    return response.data;
+});
+
+
+export const userRegister = createAsyncThunk('users/userRegister', async (userData) => {
+    const response = await axiosInstance.post('/user/register', userData);
+    return response.data;
+});
+export const userLogin = createAsyncThunk('users/userLogin', async (userData) => {
+    const response = await axiosInstance.post('/user/login', userData);
+    return response.data;
+});
+
+
+export const userLogout = createAsyncThunk('users/userLogout', async () => {
+    const response = await axiosInstance.post('/user/logout');
+    return response.data;
+});
+
+// user delete only admin panel 
+export const userDelete = createAsyncThunk('users/userDelete', async ({id, public_id}) => {
+    const response = await axiosInstance.delete(`/user-delete/${id}/${public_id}`, );
+    return response.data;
+});
+
+
+export const uploadProfilePicture = createAsyncThunk('users/uploadProfilePicture', async ({id,formData}) => {
+    const response = await axiosInstance.post(`/upload-profile/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+});
+
+
+export const forgetPassword = createAsyncThunk('users/forgetPassword', async (userData) => {
+    const response = await axiosInstance.post('/user/forget-password', userData);
+    return response.data;
+});
+
+export const confirmOtpCode = createAsyncThunk('users/confirmOtpCode', async ({ userId, userData }) => {
+    const response = await axiosInstance.post(`/user/confirm-otp-code/${userId}`, userData);
+    return response.data;
+});
+
+export const newPassword = createAsyncThunk('users/newPassword', async ({ userId, userData }) => {
+    const response = await axiosInstance.post(`/user/new-password/${userId}`, userData);
+    return response.data;
+});
+
+export const resendOtpCode = createAsyncThunk('users/resendOtpCode', async (userId) => {
+    const response = await axiosInstance.post(`/user/resend-otp-code/${userId}`);
+    return response.data;
+});
+
+
+const userSlice = createSlice({
+    name: 'users',
+    initialState: {
+        users: [],
+        user: null,
+        isAuthenticated: false,
+        loading: false,
+        error: null
+    },
+
+    reducers: {},
+    extraReducers: ((builder) => {
+        builder.addCase(fetchUsers.pending, (state) => {
+            state.loading = true
+        })
+            .addCase(fetchUsers.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = action.payload
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            // single user get
+            .addCase(fetchSingleUser.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(fetchSingleUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(fetchSingleUser.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            .addCase(userRegister.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(userRegister.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload
+            })
+            .addCase(userRegister.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            // user login 
+
+            .addCase(userLogin.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(userLogin.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload
+            })
+            .addCase(userLogin.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            // user logout
+
+            .addCase(userLogout.pending, (state) => {
+                state.loading = true;
+                
+            })
+            .addCase(userLogout.fulfilled, (state) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null
+            })
+            .addCase(userLogout.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+
+            // delete user
+
+            .addCase(userDelete.pending, (state) => {
+                state.loading = true;
+                
+            })
+            .addCase(userDelete.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(userDelete.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            // upload profile picture
+
+            .addCase(uploadProfilePicture.pending, (state) => {
+                state.loading = true;
+                
+            })
+            .addCase(uploadProfilePicture.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(uploadProfilePicture.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+
+            // forget password 
+            .addCase(forgetPassword.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(forgetPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(forgetPassword.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+
+            // confirm otp code 
+
+            .addCase(confirmOtpCode.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(confirmOtpCode.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(confirmOtpCode.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+
+            // new password 
+            .addCase(newPassword.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(newPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = action.payload
+            })
+            .addCase(newPassword.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+            // resend otp code 
+            .addCase(resendOtpCode.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(resendOtpCode.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload
+            })
+            .addCase(resendOtpCode.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.error.message
+            })
+
+
+    })
+});
+
+export default userSlice.reducer;

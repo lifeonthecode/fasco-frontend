@@ -1,7 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useRef } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { fetchSingleUser, userLogin } from '../../../App/Features/User/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
+
+    const dispatch = useDispatch();
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const navigate = useNavigate()
+    // myname@gmail.com
+    // myname1234
+
+
+    const handleUserLogin = async (e) => {
+        e.preventDefault()
+        const userData = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        }
+        try {
+
+            const response = await dispatch(userLogin(userData)).unwrap();
+            toast.success(response.message, {
+                position: 'top-right'
+            });
+            console.log('response: ', response)
+            dispatch(fetchSingleUser());
+            // clear ui data 
+            emailRef.current.value = '';
+            passwordRef.current.value = '';
+
+            // let's go product page 
+            navigate('/products')
+
+        } catch (error) {
+
+            toast.error(error.message, {
+                position: 'top-right'
+            });
+        }
+
+    }
+
     return (
         <div className='w-full bg-white py-[70px]'>
             <div className="lg:container mx-auto">
@@ -15,14 +57,14 @@ const Login = () => {
                     <div className='max-w-[628px] w-full h-auto'>
                         <h3 className='text-6xl text-[#484848] font-normal uppercase mb-9'>fasco</h3>
                         <h4 className='text-3xl text-black font-normal capitalize flex items-center mb-14'>sign in to <span className='uppercase'>fasco</span></h4>
-                        <form className='w-full h-auto flex flex-col gap-4.5 items-center'>
+                        <form onSubmit={handleUserLogin} className='w-full h-auto flex flex-col gap-4.5 items-center'>
                             {/* input box email  */}
                             <div className='w-full h-[47px] border-b-[2px] border-[#9d9d9d]'>
-                                <input className='w-full h-full border-none outline-0' type="email" placeholder='Enter your email...' required />
+                                <input ref={emailRef} className='w-full h-full border-none outline-0' type="email" placeholder='Enter your email...' required />
                             </div>
                             {/* input box password */}
                             <div className='w-full h-[47px] border-b-[2px] border-[#9d9d9d]'>
-                                <input className='w-full h-full border-none outline-0' type="email" placeholder='Enter your password...' required />
+                                <input ref={passwordRef} className='w-full h-full border-none outline-0' type="text" placeholder='Enter your password...' required />
                             </div>
                             <div className='w-full h-auto flex items-center justify-center'>
 

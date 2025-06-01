@@ -12,6 +12,7 @@ import Register from './Pages/Auth/Register/Register'
 import Login from './Pages/Auth/Login/Login'
 import ConfirmationCode from './Pages/Auth/ConfirmationCode/ConfirmationCode'
 import NewPassword from './Pages/Auth/NewPassword/NewPassword'
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
 
 function App() {
 
@@ -22,16 +23,21 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<Product />} />
-          <Route path='/products/:id' element={<ProductDetails />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/checkout' element={<Checkout />} />
+
+          {/* protected routes here  */}
+          <Route element={<PrivateRoute />}>
+            <Route path='/products/:id' element={<ProductDetails />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/checkout' element={<Checkout />} />
+          </Route>
+
 
           {/* auth routes  */}
-          <Route path='/login' element={<Login/>} />
-          <Route path='/register' element={<Register/>} />
-          <Route path='/forget-password' element={<ForgetPassword/>} />
-          <Route path='/confirmation-code' element={<ConfirmationCode/>} />
-          <Route path='/new-password' element={<NewPassword/>} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/forget-password' element={<ForgetPassword />} />
+          <Route path='/confirmation-code/:userId' element={<ConfirmationCode />} />
+          <Route path='/new-password/:userId/:otp' element={<NewPassword />} />
 
         </Routes>
         {/* footer component */}

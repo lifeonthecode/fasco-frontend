@@ -1,12 +1,60 @@
-import { useNavigate } from "react-router";
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { confirmOtpCode, resendOtpCode } from "../../../App/Features/User/userSlice";
+import { toast } from "react-toastify";
 
 const ConfirmationCode = () => {
 
+    const dispatch = useDispatch()
+    const otpRef = useRef()
     const navigate = useNavigate()
+    
+    const {userId} = useParams()
 
-    const handleConfirmationCode = ()=> {
-        // new-password
-        navigate('/new-password')
+    const handleConfirmationCode = async (e) => {
+        e.preventDefault()
+        const userData = {
+            otp: otpRef.current.value,
+        }
+        try {
+
+            const response = await dispatch(confirmOtpCode({userId,userData})).unwrap();
+            toast.success(response.message, {
+                position: 'top-right'
+            });
+            console.log('response: ', response)
+            // clear ui data 
+            otpRef.current.value = '';
+
+            // let's go confirmation code page
+            navigate(`/new-password/${response.userId}/${userData.otp}`)
+
+        } catch (error) {
+
+            toast.error(error.message, {
+                position: 'top-right'
+            });
+        }
+
+    };
+
+
+    const handleResendOtpCode = async () => {
+        try {
+
+            const response = await dispatch(resendOtpCode(userId)).unwrap();
+            toast.success(response.message, {
+                position: 'top-right'
+            });
+            console.log('response: ', response)
+
+        } catch (error) {
+
+            toast.error(error.message, {
+                position: 'top-right'
+            });
+        }
     }
     return (
         <div className='w-full bg-white py-[70px]'>
@@ -24,7 +72,7 @@ const ConfirmationCode = () => {
                         <form onSubmit={handleConfirmationCode} className='w-full h-auto flex flex-col gap-4.5 items-center'>
                             {/* input box code   */}
                             <div className='w-full h-[47px] border-b-[2px] border-[#9d9d9d]'>
-                                <input className='w-full h-full border-none outline-0' type="text" placeholder='Confirmation Code' required />
+                                <input ref={otpRef} className='w-full h-full border-none outline-0' type="text" placeholder='Confirmation Code' required />
                             </div>
                             <div className='w-full h-auto flex items-center justify-center'>
 
@@ -37,7 +85,7 @@ const ConfirmationCode = () => {
 
                             <p className='max-w-[575px] w-full text-black flex items-center gap-3 justify-center'>Didn't receive confirmation code?
 
-                                <button className='text-lg font-poppins font-normal capitalize flex items-center justify-center cursor-pointer text-[#5b86e5]'>resend now</button>
+                                <button onClick={handleResendOtpCode} className='text-lg font-poppins font-normal capitalize flex items-center justify-center cursor-pointer text-[#5b86e5]'>resend now</button>
                             </p>
 
                         </div>
