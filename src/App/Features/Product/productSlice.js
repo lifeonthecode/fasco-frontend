@@ -3,7 +3,11 @@ import axiosInstance from "../../Api/axiosInstance";
 
 // create product 
 export const createProduct = createAsyncThunk('product/createProduct', async (productData) => {
-    const response = await axiosInstance.post('/product/create-product', productData);
+    const response = await axiosInstance.post('/product/create-product', productData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return response.data;
 });
 
@@ -26,7 +30,11 @@ export const getSingleProduct = createAsyncThunk('product/getSingleProduct', asy
 
 // get single product
 export const updateSingleProduct = createAsyncThunk('product/updateProduct', async ({id, productData}) => {
-    const response = await axiosInstance.put(`/update-product/${id}`, productData);
+    const response = await axiosInstance.put(`product/update-product/${id}`, productData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return response.data;
 });
 
@@ -34,7 +42,7 @@ export const updateSingleProduct = createAsyncThunk('product/updateProduct', asy
 
 // delete single product
 export const deleteSingleProduct = createAsyncThunk('product/deleteSingleProduct', async (id) => {
-    const response = await axiosInstance.delete(`/delete-product/${id}`);
+    const response = await axiosInstance.delete(`product/delete-product/${id}`);
     return response.data;
 });
 
@@ -42,7 +50,7 @@ export const deleteSingleProduct = createAsyncThunk('product/deleteSingleProduct
 
 // get best products 
 export const getBestProducts = createAsyncThunk('product/getBestProduct', async () => {
-    const response = await axiosInstance.get(`/products/best-sellers`);
+    const response = await axiosInstance.get(`product/products/best-sellers`);
     return response.data;
 });
 
@@ -54,7 +62,7 @@ export const getDealsProducts = createAsyncThunk('product/getDealsProduct', asyn
 
 // get deals products 
 export const productNewArrivals = createAsyncThunk('product/productNewArrivals', async () => {
-    const response = await axiosInstance.get(`/products/new-arrivals`);
+    const response = await axiosInstance.get(`/product/products/new-arrivals`);
     return response.data;
 });
 
@@ -65,8 +73,8 @@ const productSlice = createSlice({
     name: 'product',
     initialState: {
         products: [],
-        singleProduct: null,
-        loading: false,
+        product: null,
+        loading: true,
         error: null
     },
     reducers: {},
@@ -75,12 +83,11 @@ const productSlice = createSlice({
         .addCase(createProduct.pending, (state) => {
             state.loading = true
         })
-        .addCase(createProduct.fulfilled, (state, action) => {
-            state.products = action.payload;
+        .addCase(createProduct.fulfilled, (state) => {
             state.loading = false
         })
         .addCase(createProduct.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -93,7 +100,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(getProducts.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -103,11 +110,11 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(getSingleProduct.fulfilled, (state, action) => {
-            state.singleProduct = action.payload;
+            state.product = action.payload.product;
             state.loading = false
         })
         .addCase(getSingleProduct.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -121,7 +128,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(updateSingleProduct.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -134,7 +141,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(deleteSingleProduct.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -147,7 +154,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(getBestProducts.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -160,7 +167,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(getDealsProducts.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 
@@ -173,7 +180,7 @@ const productSlice = createSlice({
             state.loading = false
         })
         .addCase(productNewArrivals.rejected, (state, action) => {
-            state.loading = true,
+            state.loading = false;
             state.error = action.error.message
         })
 

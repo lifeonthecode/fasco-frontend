@@ -34,8 +34,8 @@ export const userDelete = createAsyncThunk('users/userDelete', async ({id, publi
 });
 
 
-export const uploadProfilePicture = createAsyncThunk('users/uploadProfilePicture', async ({id,formData}) => {
-    const response = await axiosInstance.post(`/upload-profile/${id}`, formData, {
+export const uploadProfilePicture = createAsyncThunk('users/uploadProfilePicture', async ({id,avatarForm}) => {
+    const response = await axiosInstance.post(`/user/upload-profile/${id}`, avatarForm, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -68,66 +68,68 @@ export const resendOtpCode = createAsyncThunk('users/resendOtpCode', async (user
 const userSlice = createSlice({
     name: 'users',
     initialState: {
-        users: [],
+        userLists: [],
         user: null,
         isAuthenticated: false,
-        loading: false,
+        loading: true,
         error: null
     },
 
     reducers: {},
     extraReducers: ((builder) => {
-        builder.addCase(fetchUsers.pending, (state) => {
-            state.loading = true
-        })
+        builder
+        // .addCase(fetchUsers.pending, (state) => {
+        //     state.loading = true
+        // })
             .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.loading = false;
-                state.users = action.payload
+                state.userLists = action.payload.users;
+                state.loading = false
             })
             .addCase(fetchUsers.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
             // single user get
             .addCase(fetchSingleUser.pending, (state) => {
-                state.loading = true
+                state.loading = true;
             })
             .addCase(fetchSingleUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload
+                state.user = action.payload.user;
+                state.isAuthenticated = true
             })
             .addCase(fetchSingleUser.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
             .addCase(userRegister.pending, (state) => {
-                state.loading = true
+                state.loading = true;
             })
-            .addCase(userRegister.fulfilled, (state, action) => {
+            .addCase(userRegister.fulfilled, (state) => {
                 state.loading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload
             })
             .addCase(userRegister.rejected, (state, action) => {
-                state.loading = true;
-                state.error = action.error.message
+                state.loading = false;
+                state.error = action.error.message;
+
             })
 
             // user login 
 
             .addCase(userLogin.pending, (state) => {
-                state.loading = true
+                state.loading = true;
             })
-            .addCase(userLogin.fulfilled, (state, action) => {
+            .addCase(userLogin.fulfilled, (state) => {
                 state.loading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload
             })
             .addCase(userLogin.rejected, (state, action) => {
-                state.loading = true;
-                state.error = action.error.message
+                state.loading = false;
+                state.error = action.error.message;
+
             })
 
             // user logout
@@ -139,11 +141,12 @@ const userSlice = createSlice({
             .addCase(userLogout.fulfilled, (state) => {
                 state.loading = false;
                 state.isAuthenticated = false;
-                state.user = null
+                state.user = null;
             })
             .addCase(userLogout.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
+
             })
 
 
@@ -155,10 +158,10 @@ const userSlice = createSlice({
             })
             .addCase(userDelete.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload
+                state.userLists = state.userLists.filter((user) => user._id !== action.meta.arg.id)
             })
             .addCase(userDelete.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
@@ -173,7 +176,7 @@ const userSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(uploadProfilePicture.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
@@ -187,7 +190,7 @@ const userSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(forgetPassword.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
@@ -202,7 +205,7 @@ const userSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(confirmOtpCode.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
@@ -211,12 +214,11 @@ const userSlice = createSlice({
             .addCase(newPassword.pending, (state) => {
                 state.loading = true
             })
-            .addCase(newPassword.fulfilled, (state, action) => {
+            .addCase(newPassword.fulfilled, (state) => {
                 state.loading = false;
-                state.users = action.payload
             })
             .addCase(newPassword.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 
@@ -229,7 +231,7 @@ const userSlice = createSlice({
                 state.user = action.payload
             })
             .addCase(resendOtpCode.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error.message
             })
 

@@ -99,8 +99,8 @@ const NewArrival = () => {
                 {/* categories  */}
                 <div className="flex items-center justify-center gap-10 mb-10">
                     {
-                        newArrivalsCategories.map((category) => (
-                            <button className={`text-base font-poppins font-normal capitalize cursor-pointer ${category.id === 2 ? 'px-6 py-2.5 bg-black rounded-sm text-white' : 'text-[#8a8a8a] '}`} key={category.id}>{category.name}</button>
+                        newArrivalsCategories.map((category, index) => (
+                            <button className={`text-base font-poppins font-normal capitalize cursor-pointer ${category.id === 2 ? 'px-6 py-2.5 bg-black rounded-sm text-white' : 'text-[#8a8a8a] '}`} key={index}>{category.name}</button>
                         ))
                     }
                 </div>

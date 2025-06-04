@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useRef } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { fetchSingleUser, userLogin } from '../../../App/Features/User/userSlice';
@@ -10,8 +10,6 @@ const Login = () => {
     const emailRef = useRef()
     const passwordRef = useRef()
     const navigate = useNavigate()
-    // myname@gmail.com
-    // myname1234
 
 
     const handleUserLogin = async (e) => {
@@ -23,11 +21,12 @@ const Login = () => {
         try {
 
             const response = await dispatch(userLogin(userData)).unwrap();
+            dispatch(fetchSingleUser());
+
             toast.success(response.message, {
                 position: 'top-right'
             });
-            console.log('response: ', response)
-            dispatch(fetchSingleUser());
+            
             // clear ui data 
             emailRef.current.value = '';
             passwordRef.current.value = '';

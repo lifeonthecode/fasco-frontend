@@ -5,8 +5,8 @@ const ProductCard = ({ products }) => {
     return (
         <>
             {
-                products?.map((product) => (
-                    <div className='flex flex-col gap-5 p-3 min-h-[531px] h-full min-w-[326px] w-full'>
+                products?.map((product, index) => (
+                    <div key={index} className='flex flex-col gap-5 p-3 min-h-[531px] h-full min-w-[326px] w-full'>
                         <div className='w-full min-h-[400px] h-full relative'>
                             <img src={product?.image} className='w-full h-full object-cover' alt={product?.productName} />
 

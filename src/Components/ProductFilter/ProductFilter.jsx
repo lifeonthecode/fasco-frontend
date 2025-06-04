@@ -133,7 +133,7 @@ const ProductFilter = () => {
         }
     ];
 
-    console.log('activeFilter', activeFilter);
+    // console.log('activeFilter', activeFilter);
 
     return (
         <div className="flex flex-col gap-8 max-w-[300px] w-full max-h-[1112px] h-full p-5 border-[1px] border-[#8a8a8a] rounded-lg">

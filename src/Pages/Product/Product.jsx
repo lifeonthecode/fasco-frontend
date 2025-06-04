@@ -207,7 +207,7 @@ const Product = () => {
         },
     ]
 
-    console.log('activeGrid', activeGrid);
+    // console.log('activeGrid', activeGrid);
 
     return (
         <div className="w-full pt-[50px]">

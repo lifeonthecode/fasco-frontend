@@ -23,10 +23,10 @@ const Register = () => {
         try {
 
             const response = await dispatch(userRegister(userData)).unwrap();
+            dispatch(fetchSingleUser());
             toast.success(response.message, {
                 position: 'top-right'
             });
-            dispatch(fetchSingleUser());
 
             // clear ui data 
             nameRef.current.value = '';
