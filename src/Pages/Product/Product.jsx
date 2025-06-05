@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductFilter from "../../Components/ProductFilter/ProductFilter";
 import { CiGrid2V, CiGrid41, CiGrid31 } from "react-icons/ci";
 import ProductCard from './../../Components/ProductCard/ProductCard';
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../App/Features/Product/productSlice";
 const Product = () => {
+
+    const dispatch = useDispatch();
+    const {products, loading} = useSelector((state) => state.product);
 
     const [activeGrid, setActiveGrid] = useState({
         grid: 'grid-cols-3',
@@ -33,181 +38,197 @@ const Product = () => {
 
 
 
-    const products = [
-        {
-            productId: 1,
-            productName: 'Product 1',
-            price: 100,
-            image: '/products/product_1.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'red'
-                },
-                {
-                    id: 2,
-                    color: 'blue'
-                },
-            ],
-            stock: 10,
-            brand: 'Nike',
+    // const allProducts = [
+    //     {
+    //         productId: 1,
+    //         productName: 'Product 1',
+    //         price: 100,
+    //         image: '/products/product_1.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'red'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'blue'
+    //             },
+    //         ],
+    //         stock: 10,
+    //         brand: 'Nike',
 
-        },
-        {
-            productId: 2,
-            productName: 'Product 2',
-            price: 100,
-            image: '/products/product_2.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'yellow'
-                },
-                {
-                    id: 2,
-                    color: 'green'
-                },
-            ],
-            stock: 0,
-            brand: 'Nike',
+    //     },
+    //     {
+    //         productId: 2,
+    //         productName: 'Product 2',
+    //         price: 100,
+    //         image: '/products/product_2.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'yellow'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'green'
+    //             },
+    //         ],
+    //         stock: 0,
+    //         brand: 'Nike',
 
-        },
-        {
-            productId: 3,
-            productName: 'Product 3',
-            price: 100,
-            image: '/products/product_3.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'orange'
-                },
-                {
-                    id: 2,
-                    color: 'pink'
-                },
-            ],
-            stock: 0,
-            brand: 'adidas',
+    //     },
+    //     {
+    //         productId: 3,
+    //         productName: 'Product 3',
+    //         price: 100,
+    //         image: '/products/product_3.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'orange'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'pink'
+    //             },
+    //         ],
+    //         stock: 0,
+    //         brand: 'adidas',
 
-        },
-        {
-            productId: 4,
-            productName: 'Product 4',
-            price: 100,
-            image: '/products/product_4.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'orange'
-                },
-                {
-                    id: 2,
-                    color: 'pink'
-                },
-            ],
-            stock: 0,
-            brand: 'adidas',
+    //     },
+    //     {
+    //         productId: 4,
+    //         productName: 'Product 4',
+    //         price: 100,
+    //         image: '/products/product_4.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'orange'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'pink'
+    //             },
+    //         ],
+    //         stock: 0,
+    //         brand: 'adidas',
 
-        },
-        {
-            productId: 5,
-            productName: 'Product 5',
-            price: 100,
-            image: '/products/product_5.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'blue'
-                },
-                {
-                    id: 2,
-                    color: 'green'
-                },
-            ],
-            stock: 5,
-            brand: 'nike',
+    //     },
+    //     {
+    //         productId: 5,
+    //         productName: 'Product 5',
+    //         price: 100,
+    //         image: '/products/product_5.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'blue'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'green'
+    //             },
+    //         ],
+    //         stock: 5,
+    //         brand: 'nike',
 
-        },
-        {
-            productId: 6,
-            productName: 'Product 6',
-            price: 100,
-            image: '/products/product_6.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'orange'
-                },
-                {
-                    id: 2,
-                    color: 'pink'
-                },
-            ],
-            stock: 20,
-            brand: 'puma',
+    //     },
+    //     {
+    //         productId: 6,
+    //         productName: 'Product 6',
+    //         price: 100,
+    //         image: '/products/product_6.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'orange'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'pink'
+    //             },
+    //         ],
+    //         stock: 20,
+    //         brand: 'puma',
 
-        },
-        {
-            productId: 7,
-            productName: 'Product 7',
-            price: 100,
-            image: '/products/product_7.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'red'
-                },
-                {
-                    id: 2,
-                    color: 'pink'
-                },
-            ],
-            stock: 0,
-            brand: 'reebok',
+    //     },
+    //     {
+    //         productId: 7,
+    //         productName: 'Product 7',
+    //         price: 100,
+    //         image: '/products/product_7.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'red'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'pink'
+    //             },
+    //         ],
+    //         stock: 0,
+    //         brand: 'reebok',
 
-        },
-        {
-            productId: 8,
-            productName: 'Product 8',
-            price: 100,
-            image: '/products/product_8.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'blue'
-                },
-                {
-                    id: 2,
-                    color: 'orange'
-                },
-            ],
-            stock: 0,
-            brand: 'adidas',
+    //     },
+    //     {
+    //         productId: 8,
+    //         productName: 'Product 8',
+    //         price: 100,
+    //         image: '/products/product_8.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'blue'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'orange'
+    //             },
+    //         ],
+    //         stock: 0,
+    //         brand: 'adidas',
 
-        },
-        {
-            productId: 9,
-            productName: 'Product 9',
-            price: 100,
-            image: '/products/product_9.png',
-            color: [
-                {
-                    id: 1,
-                    color: 'red'
-                },
-                {
-                    id: 2,
-                    color: 'green'
-                },
-            ],
-            stock: 3,
-            brand: 'reebok',
+    //     },
+    //     {
+    //         productId: 9,
+    //         productName: 'Product 9',
+    //         price: 100,
+    //         image: '/products/product_9.png',
+    //         color: [
+    //             {
+    //                 id: 1,
+    //                 color: 'red'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 color: 'green'
+    //             },
+    //         ],
+    //         stock: 3,
+    //         brand: 'reebok',
 
-        },
-    ]
+    //     },
+    // ]
+
+    useEffect(() => {
+        const fetchAllProducts = async () => {
+            dispatch(getProducts())
+        };
+
+        fetchAllProducts()
+    }, [dispatch])
+
+    console.log('display all products: ', products)
 
     // console.log('activeGrid', activeGrid);
+
+    if(loading) {
+        return <div className="flex items-center justify-center">
+            <p className="text-4xl text-green-700">Products Loading</p>
+        </div>
+    }
 
     return (
         <div className="w-full pt-[50px]">
@@ -250,7 +271,7 @@ const Product = () => {
 
                         {/* product grid  */}
                         <div className={`grid ${activeGrid.grid} gap-6`}>
-                            <ProductCard products={products} />
+                            <ProductCard products={products.products} />
                         </div>
                     </div>
                 </div>

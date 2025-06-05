@@ -12,7 +12,6 @@ import { FaUserCircle } from "react-icons/fa";
 
 
 const Sidebar = ({ user }) => {
-    // console.log('sidebar: ', user)
 
 
     return <nav className="flex flex-col gap-6 text-3xl capitalize text-black">

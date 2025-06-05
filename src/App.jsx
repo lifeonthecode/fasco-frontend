@@ -63,7 +63,7 @@ function App() {
           {/* protected routes here  */}
           <Route element={<PrivateRoute />}>
             <Route path='/products/:id' element={<ProductDetails />} />
-            <Route path='/cart' element={<Cart />} />
+            <Route path='/cart/:userId' element={<Cart />} />
             <Route path='/checkout' element={<Checkout />} />
 
             {/* dashboard  */}
