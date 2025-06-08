@@ -8,7 +8,20 @@ import { getProducts } from "../../App/Features/Product/productSlice";
 const Product = () => {
 
     const dispatch = useDispatch();
-    const {products, loading} = useSelector((state) => state.product);
+    const { productList, loading } = useSelector((state) => state.product);
+    const [page, setPage] = useState(1); // state for current page
+    const [pages, setPages] = useState(1); // state for total pages
+    const [queryParams, setQueryParams] = useState({
+        page: page,
+        limit: 3,
+        sort: '',
+        search: '',
+        brand: '',
+        color: '',
+        size: '',
+        minPrice: '',
+        maxPrice: ''
+    }); // state for query parameters
 
     const [activeGrid, setActiveGrid] = useState({
         grid: 'grid-cols-3',
@@ -35,200 +48,28 @@ const Product = () => {
 
         },
     ];
-
-
-
-    // const allProducts = [
-    //     {
-    //         productId: 1,
-    //         productName: 'Product 1',
-    //         price: 100,
-    //         image: '/products/product_1.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'red'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'blue'
-    //             },
-    //         ],
-    //         stock: 10,
-    //         brand: 'Nike',
-
-    //     },
-    //     {
-    //         productId: 2,
-    //         productName: 'Product 2',
-    //         price: 100,
-    //         image: '/products/product_2.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'yellow'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'green'
-    //             },
-    //         ],
-    //         stock: 0,
-    //         brand: 'Nike',
-
-    //     },
-    //     {
-    //         productId: 3,
-    //         productName: 'Product 3',
-    //         price: 100,
-    //         image: '/products/product_3.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'orange'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'pink'
-    //             },
-    //         ],
-    //         stock: 0,
-    //         brand: 'adidas',
-
-    //     },
-    //     {
-    //         productId: 4,
-    //         productName: 'Product 4',
-    //         price: 100,
-    //         image: '/products/product_4.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'orange'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'pink'
-    //             },
-    //         ],
-    //         stock: 0,
-    //         brand: 'adidas',
-
-    //     },
-    //     {
-    //         productId: 5,
-    //         productName: 'Product 5',
-    //         price: 100,
-    //         image: '/products/product_5.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'blue'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'green'
-    //             },
-    //         ],
-    //         stock: 5,
-    //         brand: 'nike',
-
-    //     },
-    //     {
-    //         productId: 6,
-    //         productName: 'Product 6',
-    //         price: 100,
-    //         image: '/products/product_6.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'orange'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'pink'
-    //             },
-    //         ],
-    //         stock: 20,
-    //         brand: 'puma',
-
-    //     },
-    //     {
-    //         productId: 7,
-    //         productName: 'Product 7',
-    //         price: 100,
-    //         image: '/products/product_7.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'red'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'pink'
-    //             },
-    //         ],
-    //         stock: 0,
-    //         brand: 'reebok',
-
-    //     },
-    //     {
-    //         productId: 8,
-    //         productName: 'Product 8',
-    //         price: 100,
-    //         image: '/products/product_8.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'blue'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'orange'
-    //             },
-    //         ],
-    //         stock: 0,
-    //         brand: 'adidas',
-
-    //     },
-    //     {
-    //         productId: 9,
-    //         productName: 'Product 9',
-    //         price: 100,
-    //         image: '/products/product_9.png',
-    //         color: [
-    //             {
-    //                 id: 1,
-    //                 color: 'red'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'green'
-    //             },
-    //         ],
-    //         stock: 3,
-    //         brand: 'reebok',
-
-    //     },
-    // ]
+    const queryParamsURL = new URLSearchParams(queryParams).toString();
 
     useEffect(() => {
         const fetchAllProducts = async () => {
-            dispatch(getProducts())
+            const response = await dispatch(getProducts(queryParamsURL)).unwrap();
+            setPages(response?.pages);
+            setPage(response?.page);
         };
 
         fetchAllProducts()
-    }, [dispatch])
+    }, [dispatch, queryParamsURL]);
 
-    console.log('display all products: ', products)
+    const { products } = productList
 
-    // console.log('activeGrid', activeGrid);
+    const handleSortChange = (e) => {
+        setQueryParams({
+            ...queryParams,
+            sort: e.target.value
+        })
 
-    if(loading) {
-        return <div className="flex items-center justify-center">
-            <p className="text-4xl text-green-700">Products Loading</p>
-        </div>
     }
+
 
     return (
         <div className="w-full pt-[50px]">
@@ -242,7 +83,7 @@ const Product = () => {
                 {/* product wrapper */}
                 <div className="flex justify-between gap-10 pb-[70px]">
                     {/* filter wrapper  */}
-                    <ProductFilter />
+                    <ProductFilter setQueryParams={setQueryParams} queryParams={queryParams} />
 
                     {/* products wrapper  */}
                     <div className="w-full h-auto flex flex-col gap-8">
@@ -251,43 +92,80 @@ const Product = () => {
                         <div className="flex items-center justify-between gap-16">
                             <h3 className="text-2xl text-black font-normal capitalize">products</h3>
 
-                            <div className="flex items-center gap-4">
-                                {
-                                    gridLayout?.map((gridItem) => (
-                                        <button
-                                            key={gridItem?.id}
-                                            className={`w-[42px] h-[42px] flex items-center justify-center rounded-sm cursor-pointer bg-[#f2f2f2] text-black ${activeGrid?.id === gridItem?.id && 'border-[2px] border-red-500'}`}
-                                            onClick={() => setActiveGrid({
-                                                grid:gridItem?.grid,
-                                                id: gridItem?.id
-                                            })}
+                            <div className="flex items-center gap-8 ">
+                                <div className="flex items-center gap-4">
+
+                                    <p className="text-lg capitalize font-medium font-poppins text-black">sort by</p>
+                                    <div className="flex items-center gap-3">
+                                        <select id="sort" onChange={handleSortChange} defaultValue="" className="select  border-black">
+                                            <option disabled={false} value={''}>Default (Newest)</option>
+                                            <option value={'priceAsc'}>Price: Low to High</option>
+                                            <option value={'priceDsc'}>Price: High to Low</option>
+                                            <option value={'rating'}>Rating: High to Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+
+                                    {
+                                        gridLayout?.map((gridItem) => (
+                                            <button
+                                                key={gridItem?.id}
+                                                className={`w-[42px] h-[42px] flex items-center justify-center rounded-sm cursor-pointer bg-[#f2f2f2] text-black ${activeGrid?.id === gridItem?.id && 'border-[2px] border-red-500'}`}
+                                                onClick={() => setActiveGrid({
+                                                    grid: gridItem?.grid,
+                                                    id: gridItem?.id
+                                                })}
                                             >
-                                            {gridItem?.icon}
-                                        </button>
-                                    ))
-                                }
+                                                {gridItem?.icon}
+                                            </button>
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
 
                         {/* product grid  */}
-                        <div className={`grid ${activeGrid.grid} gap-6`}>
-                            <ProductCard products={products.products} />
-                        </div>
+                        {
+                            loading ? <div className="flex items-center justify-center">
+                                <span className="loading loading-spinner text-primary loading-xl"></span>
+                            </div>
+                                :
+
+                                <div className={`grid ${activeGrid.grid} gap-6`}>
+                                    <ProductCard products={products} />
+                                </div>
+                        }
                     </div>
                 </div>
 
                 {/* pagination wrapper  */}
-                <div className="flex items-center justify-center pb-[70px]">
-                    <div className="flex items-center gap-5">
-                        <button className="w-[56px] h-[56px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowBack size={'1.5rem'} color="black" /></button>
+                <div className="flex flex-col items-center justify-center pb-[70px]">
+                    <p className="text-lg text-black font-normal">Page {page} of {pages}</p>
+                    <div className="flex gap-2 5 mt-6">
+                        <button onClick={() => {
+                            if (page > 1) {
+                                setPage(page - 1);
+                            }
+                        }} className="w-[45px] h-[45px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowBack size={'1.5rem'} color="black" /></button>
                         <div className="flex items-center gap-5">
                             {
-                                [...Array(5)]?.map((_, index) => (
-                                    <button className="text-xl text-black font-medium w-[40px] h-[40px] flex items-center justify-center cursor-pointer" key={index}>{index+1}</button>
+                                Array.from({ length: pages }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        className={`px-4 py-2 rounded-md text-sm font-medium cursor-pointer ${page === index + 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                                        onClick={() => setPage(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
                                 ))
                             }
                         </div>
-                        <button className="w-[56px] h-[56px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowForward size={'1.5rem'} color="black" /></button>
+                        <button onClick={() => {
+                            if (page < pages) {
+                                setPage(page + 1);
+                            }
+                        }} className="w-[45px] h-[45px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowForward size={'1.5rem'} color="black" /></button>
                     </div>
                 </div>
             </div>

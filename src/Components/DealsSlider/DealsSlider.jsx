@@ -4,6 +4,7 @@ import { HiOutlineArrowCircleLeft, HiOutlineArrowCircleRight } from "react-icons
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRef } from 'react';
+import { Link } from 'react-router';
 const DealsSlider = () => {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
@@ -50,16 +51,19 @@ const DealsSlider = () => {
                 }}
                 breakpoints={breakpoints}>
                 <SwiperSlide>
-                    <div className='relative'>
-                        <img className='w-full max-h-[582px] h-full object-cover' src="/deals/deals_1.png" alt="deals one" />
-                        <div className='absolute bottom-25 left-0 transform translate-y-1/2 translate-x-1/2 max-w-[217px] w-full max-h-[130px] h-full bg-white flex flex-col items-center justify-center gap-2.5 z-10'>
-                            <h5 className='text-base text-[#484848] font-poppins font-normal capitalize'>01- Spring sale</h5>
-                            <span className='text-xl text-[#484848] font-poppins capitalize font-medium'>30% off</span>
+                    <Link to={'/products'}>
+
+                        <div className='relative cursor-pointer'>
+                            <img className='w-full max-h-[582px] h-full object-cover' src="/deals/deals_1.png" alt="deals one" />
+                            <div className='absolute bottom-25 left-0 transform translate-y-1/2 translate-x-1/2 max-w-[217px] w-full max-h-[130px] h-full bg-white flex flex-col items-center justify-center gap-2.5 z-10'>
+                                <h5 className='text-base text-[#484848] font-poppins font-normal capitalize'>01- Spring sale</h5>
+                                <span className='text-xl text-[#484848] font-poppins capitalize font-medium'>30% off</span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                <div className='relative'>
+                    <div className='relative'>
                         <img className='w-full max-h-[582px] h-full object-cover' src="/deals/deals_2.png" alt="deals two" />
                         <div className='absolute bottom-25 left-0 transform translate-y-1/2 translate-x-1/2 max-w-[217px] w-full max-h-[130px] h-full bg-white flex flex-col items-center justify-center gap-2.5 z-10'>
                             <h5 className='text-base text-[#484848] font-poppins font-normal capitalize'>02- Spring sale</h5>
@@ -69,7 +73,7 @@ const DealsSlider = () => {
                 </SwiperSlide>
 
                 <SwiperSlide>
-                <div className='relative'>
+                    <div className='relative'>
                         <img className='w-full max-h-[582px] h-full object-cover' src="/deals/deals_3.png" alt="deals tree" />
                         <div className='absolute bottom-25 left-0 transform translate-y-1/2 translate-x-1/2 max-w-[217px] w-full max-h-[130px] h-full bg-white flex flex-col items-center justify-center gap-2.5 z-10'>
                             <h5 className='text-base text-[#484848] font-poppins font-normal capitalize'>03- Spring sale</h5>
@@ -79,7 +83,7 @@ const DealsSlider = () => {
                 </SwiperSlide>
 
                 <SwiperSlide>
-                <div className='relative'>
+                    <div className='relative'>
                         <img className='w-full max-h-[582px] h-full object-cover' src="/deals/deals_1.png" alt="deals one" />
                         <div className='absolute bottom-25 left-0 transform translate-y-1/2 translate-x-1/2 max-w-[217px] w-full max-h-[130px] h-full bg-white flex flex-col items-center justify-center gap-2.5 z-10'>
                             <h5 className='text-base text-[#484848] font-poppins font-normal capitalize'>01- Spring sale</h5>

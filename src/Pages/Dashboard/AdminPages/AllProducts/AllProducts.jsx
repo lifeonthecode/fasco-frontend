@@ -7,15 +7,16 @@ import Swal from 'sweetalert2';
 
 const AllProducts = () => {
     const dispatch = useDispatch();
-    const { products, loading } = useSelector(state => state.product);
+    const { productList, loading } = useSelector(state => state.product);
     useEffect(() => {
         dispatch(getProducts());
     }, [dispatch]);
 
-    console.log('products:', products)
+    console.log('products:', productList);
+    const { products } = productList;
 
     const handleDeleteProduct = async (id) => {
-        console.log('id check: ', id)
+        // console.log('id check: ', id)
 
 
         Swal.fire({
@@ -42,10 +43,6 @@ const AllProducts = () => {
     }
 
 
-    if (loading) return (<div className='flex items-center justify-center'>
-        <p className='text-7xl text-red-500'>Loading</p>
-    </div>)
-
 
     return (
         <div className='w-full bg-white'>
@@ -62,43 +59,52 @@ const AllProducts = () => {
                         <button className='text-xl text-black font-medium capitalize font-poppins'>product details</button>
                         <button className='text-xl text-black font-medium capitalize font-poppins'>product actions</button>
                     </div>
-                    <div className='flex flex-col gap-6'>
 
-                        {
-                            products?.products?.map((product) => (
+                    {
+                        loading ? <div className='flex items-center justify-center'>
+                            <span className="loading loading-spinner text-primary loading-xl"></span>
+                        </div>
 
-                                <div key={product?._id} className='flex items-center justify-between p-4 border border-[#5932ea] rounded-lg'>
-                                    <div className='max-w-[200px] w-full max-h-[200px] h-full'>
-                                        <img className='max-w-[200px] w-full max-h-[200px] h-full object-cover rounded-2xl' src={product?.images[0]?.url} alt={product?.name} />
-                                    </div>
+                            :
 
-                                    <div className='flex flex-col gap-4'>
-                                        <h5 className='text-lg text-black font-poppins capitalize font-medium'>{product?.name}</h5>
-                                        <p className='text-base text-black font-poppins capitalize font-medium'>Original Price: {product?.originalPrice}</p>
-                                        <p className='text-base text-black font-poppins capitalize font-medium'>Discount Price: {product?.discountPrice}</p>
-                                        <p className='text-base text-black font-poppins capitalize font-medium'>Brand: {product?.brand}</p>
-                                        <p className='text-base text-black font-poppins capitalize font-medium'>Stock: {product?.stock}</p>
-                                        <p className='text-base text-black font-poppins capitalize font-medium flex items-center gap-3'>star:
-                                            <div className='flex items-center gap-2'>
-                                                {
-                                                    [...Array(Math.ceil(product?.star))]?.map((_, index) => (
-                                                        <span key={index}><FaStar color='red' /></span>
-                                                    ))
-                                                }
+                            <div className='flex flex-col gap-6'>
+
+                                {
+                                    products?.map((product) => (
+
+                                        <div key={product?._id} className='flex items-center justify-between p-4 border border-[#5932ea] rounded-lg'>
+                                            <div className='max-w-[200px] w-full max-h-[200px] h-full'>
+                                                <img className='max-w-[200px] w-full max-h-[200px] h-full object-cover rounded-2xl' src={product?.images[0]?.url} alt={product?.name} />
                                             </div>
-                                        </p>
-                                    </div>
 
-                                    {/* actions  */}
-                                    <div className='flex items-center gap-6'>
-                                        <Link to={`/dashboard/admin/update/${product?._id}`} className='btn bg-success text-base text-black font-semibold capitalize font-poppins'>update</Link>
-                                        <Link to={'/dashboard/admin/deals'} className='btn bg-[#5932ea] text-base text-white font-semibold capitalize font-poppins'>add deals</Link>
-                                        <button onClick={() => handleDeleteProduct(product?._id)} className='btn bg-red-500 text-base text-white font-semibold capitalize font-poppins'>delete</button>
-                                    </div>
-                                </div>
-                            ))
-                        }
-                    </div>
+                                            <div className='flex flex-col gap-4'>
+                                                <h5 className='text-lg text-black font-poppins capitalize font-medium'>{product?.name}</h5>
+                                                <p className='text-base text-black font-poppins capitalize font-medium'>Original Price: {product?.originalPrice}</p>
+                                                <p className='text-base text-black font-poppins capitalize font-medium'>Discount Price: {product?.discountPrice}</p>
+                                                <p className='text-base text-black font-poppins capitalize font-medium'>Brand: {product?.brand}</p>
+                                                <p className='text-base text-black font-poppins capitalize font-medium'>Stock: {product?.stock}</p>
+                                                <p className='text-base text-black font-poppins capitalize font-medium flex items-center gap-3'>star:
+                                                    <div className='flex items-center gap-2'>
+                                                        {
+                                                            [...Array(Math.ceil(product?.star))]?.map((_, index) => (
+                                                                <span key={index}><FaStar color='red' /></span>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </p>
+                                            </div>
+
+                                            {/* actions  */}
+                                            <div className='flex items-center gap-6'>
+                                                <Link to={`/dashboard/admin/update/${product?._id}`} className='btn bg-success text-base text-black font-semibold capitalize font-poppins'>update</Link>
+                                                <Link to={'/dashboard/admin/deals'} className='btn bg-[#5932ea] text-base text-white font-semibold capitalize font-poppins'>add deals</Link>
+                                                <button onClick={() => handleDeleteProduct(product?._id)} className='btn bg-red-500 text-base text-white font-semibold capitalize font-poppins'>delete</button>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                    }
                 </div>
             </div>
 

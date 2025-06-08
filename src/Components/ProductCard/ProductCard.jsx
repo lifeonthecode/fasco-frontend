@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 
 const ProductCard = ({ products }) => {
-    console.log('product card: ', products)
     return (
         <>
             {
                 products?.map((product, index) => {
-                    console.log('product, ', product)
                     return (
                         <div key={index} className='flex flex-col gap-5 p-3 min-h-[531px] h-full min-w-[326px] w-full'>
                             <div className='w-full min-h-[400px] h-full relative'>
@@ -27,7 +25,6 @@ const ProductCard = ({ products }) => {
                                     <div className='flex items-center gap-1'>
                                         {
                                             product?.colors?.map((color, index) => {
-                                                console.log('colorItem: ', color)
                                                 return(
                                                 <button
                                                     key={index}

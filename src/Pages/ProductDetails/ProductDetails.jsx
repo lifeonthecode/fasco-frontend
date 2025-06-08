@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSingleProduct } from '../../App/Features/Product/productSlice';
 import { toast } from 'react-toastify';
 import { addToCartAndUpdate, fetchCarts } from '../../App/Features/Cart/cartSlice';
+import { addWishlist, fetchWishlist } from '../../App/Features/Wishlist/wishlistSlice';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -119,8 +120,8 @@ const ProductDetails = () => {
     console.log('selectedProduct: ', selectedProduct)
 
 
+    // add to cart handle 
     const handleAddToCart = async (id) => {
-
         // userId, productId, quantity, selectedSize, selectedColor
         const cartData = {
             userId: user?._id,
@@ -129,8 +130,6 @@ const ProductDetails = () => {
             selectedColor: selectedProduct.color.trim(),
             selectedSize: selectedProduct.size.trim(),
         }
-
-
 
         try {
 
@@ -141,6 +140,29 @@ const ProductDetails = () => {
                 position: 'top-center'
             })
 
+        } catch (error) {
+            toast.error(error.message, {
+                position: 'top-center'
+            })
+        }
+    }
+
+
+    // add to wishlist handle
+    const handleAddToWishlist = async (id) => {
+        try {
+
+            if (!user?._id) {
+                throw new Error('Please login to add product to wishlist');
+            }
+            const response = await dispatch(addWishlist({ userId: user?._id, productId: id })).unwrap();
+            if (response.success) {
+                dispatch(fetchWishlist(user?._id));
+                toast.success(response.message, {
+                    position: 'top-center'
+                })
+            } 
+            
         } catch (error) {
             toast.error(error.message, {
                 position: 'top-center'
@@ -186,7 +208,11 @@ const ProductDetails = () => {
                             <div className="flex items-center justify-between">
 
                                 <h1 className='text-3xl text-black font-normal capitalize'>{product?.name}</h1>
-                                <span className='cursor-pointer'><CiStar size={'1.25rem'} color='black' /></span>
+
+                                <button onClick={() => handleAddToWishlist(id)} className='w-[46px] h-[46px] bg-[#eeeeee] rounded-lg flex items-center justify-center cursor-pointer'>
+
+                                    <span className='cursor-pointer'><CiStar color={'red'} size={'2rem'} /></span>
+                                </button>
                             </div>
                             <div className='flex items-center gap-3.5'>
                                 {

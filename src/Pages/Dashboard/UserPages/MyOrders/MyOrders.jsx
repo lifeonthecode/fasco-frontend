@@ -1,31 +1,120 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { cancelledOrderByUser, getAllOrdersByUser } from "../../../../App/Features/Order/orderSlice";
+import { toast } from "react-toastify";
 
 const MyOrders = () => {
-    return (
-        <div className="w-ful min-h-screen border-gray-50">
-            <div className="flex items-center justify-between gap-4 p-4 border-[2px] border-[#00ac4f] mb-8 rounded-lg">
-                <h4 className="text-xl text-black font-semibold font-poppins capitalize">image</h4>
-                <h4 className="text-xl text-black font-semibold font-poppins capitalize">details</h4>
 
-                <h4 className="text-xl text-black font-semibold font-poppins capitalize">action</h4>
-            </div>
-            <div className="flex flex-col gap-4 w-full">
-                {
-                    
-                }
-                <div className="flex justify-between gap-4">
-                    <div>
-                        <img className="w-[100px] h-[100px] rounded-3xl" src="../../../../../public/customers/customer_1.png" alt="" />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <h4 className="text-base text-black font-poppins capitalize font-medium">name</h4>
-                        <p className="text-base text-black font-poppins capitalize font-medium">price</p>
-                        <p className="text-base text-black font-poppins capitalize font-medium">description</p>
-                    </div>
-                    <div>
-                        <button className="text-base text-black font-poppins capitalize font-medium cursor-pointer">action</button>
-                    </div>
+    const dispatch = useDispatch()
+    const { user } = useSelector((state) => state.users);
+    const { orderLists, loading } = useSelector((state) => state.order);
+
+    useEffect(() => {
+        // Fetch all orders for the user when the component mounts
+        if (user && user._id) {
+            // Assuming you have an action to fetch orders by user ID
+            // dispatch(getAllOrdersByUser(user._id));
+            dispatch(getAllOrdersByUser(user?._id));
+        }
+    }, [user, dispatch]);
+    // console.log(orderLists, "orderLists");
+
+    const handleCanceledOrder = async(orderId) => {
+        try {
+            
+            // Dispatch an action to cancel the order
+            const response = await dispatch(cancelledOrderByUser(orderId)).unwrap();
+            // Handle the response if needed
+            if (response.success) {
+                toast.success("Order cancelled successfully!");
+                dispatch(getAllOrdersByUser(user?._id)); // Refresh the order list
+            }
+            // console.log("Order cancelled:", orderId);
+
+        } catch (error) {
+            toast.error("Failed to cancel order. Please try again."+ error.message);
+        }
+    }
+
+    return (
+        <div className="p-6">
+            <h2 className="text-2xl font-bold mb-4">All Orders</h2>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                        <thead>
+                            <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Order ID
+                                    </h4>
+                                </th>
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Status
+                                    </h4>
+                                </th>
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Payment
+                                    </h4>
+                                </th>
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Total
+                                    </h4>
+
+                                </th>
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Date
+                                    </h4>
+                                </th>
+                                <th className="py-3 px-4 border-b">
+                                    <h4 className="text-xl text-black font-medium capitalize font-poppins">
+                                        Action
+                                    </h4>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orderLists?.orders?.map((order) => (
+                                <tr key={order._id} className="text-sm text-gray-700">
+                                    <td className="py-3 px-4 border-b">{order?._id}</td>
+                                    <td className="py-3 px-4 border-b">
+                                        <span
+                                            className={`px-4 py-2 rounded text-lg text-black font-medium capitalize font-poppins cursor-pointer ${order?.orderStatus === 'delivered' ? 'bg-green-500' : order?.orderStatus === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'}`}
+                                        >
+                                            {order?.orderStatus}
+                                        </span>
+                                    </td>
+                                    <td className="py-3 px-4 border-b">
+                                        <p className="text-lg text-black font-medium capitalize font-poppins">
+                                            {order?.paymentMethod}
+                                        </p>
+
+                                    </td>
+                                    <td className="py-3 px-4 border-b">
+                                        <p className="text-lg text-black font-medium capitalize font-poppins">
+                                            ${order?.totalAmount}
+                                        </p>
+                                    </td>
+                                    <td className="py-3 px-4 border-b">
+                                        <p className="text-lg text-black font-medium capitalize font-poppins">
+                                            {new Date(order?.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </td>
+                                    <td className="py-3 px-4 border-b">
+                                        <button onClick={() =>handleCanceledOrder(order?._id)}  className="text-lg text-black font-medium capitalize font-poppins px-4 py-2 bg-red-500 rounded cursor-pointer">cancelled</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

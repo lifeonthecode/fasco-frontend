@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../Api/axiosInstance";
+import { QueryStatus } from "@reduxjs/toolkit/query";
 
 // create product 
 export const createProduct = createAsyncThunk('product/createProduct', async (productData) => {
@@ -13,8 +14,8 @@ export const createProduct = createAsyncThunk('product/createProduct', async (pr
 
 
 // get products
-export const getProducts = createAsyncThunk('product/getProducts', async () => {
-    const response = await axiosInstance.get('/product/products');
+export const getProducts = createAsyncThunk('product/getProducts', async (queryParamsURL) => {
+    const response = await axiosInstance.get(`/product/products?${queryParamsURL}`);
     return response.data;
 });
 
@@ -72,12 +73,20 @@ export const productNewArrivals = createAsyncThunk('product/productNewArrivals',
 const productSlice = createSlice({
     name: 'product',
     initialState: {
-        products: [],
+        productList: {},
         product: null,
         loading: true,
-        error: null
+        error: null,
+        search: '',
     },
-    reducers: {},
+    reducers: {
+        search: (state, action) => {
+            state.search = action.payload;
+        },
+        removeSearch: (state) => {
+            state.search = '';
+        },
+    },
     extraReducers: ((builder) => {
         builder
         .addCase(createProduct.pending, (state) => {
@@ -96,7 +105,7 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(getProducts.fulfilled, (state, action) => {
-            state.products = action.payload;
+            state.productList = action.payload;
             state.loading = false
         })
         .addCase(getProducts.rejected, (state, action) => {
@@ -150,7 +159,7 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(getBestProducts.fulfilled, (state, action) => {
-            state.products = action.payload;
+            state.productList = action.payload;
             state.loading = false
         })
         .addCase(getBestProducts.rejected, (state, action) => {
@@ -163,7 +172,7 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(getDealsProducts.fulfilled, (state, action) => {
-            state.products = action.payload;
+            state.productList = action.payload;
             state.loading = false
         })
         .addCase(getDealsProducts.rejected, (state, action) => {
@@ -176,7 +185,7 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(productNewArrivals.fulfilled, (state, action) => {
-            state.products = action.payload;
+            state.productList = action.payload;
             state.loading = false
         })
         .addCase(productNewArrivals.rejected, (state, action) => {
@@ -190,3 +199,4 @@ const productSlice = createSlice({
 });
 
 export default productSlice.reducer;
+export const { search, removeSearch } = productSlice.actions;

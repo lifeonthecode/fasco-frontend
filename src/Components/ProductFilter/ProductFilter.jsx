@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const ProductFilter = () => {
+
+const ProductFilter = ({ setQueryParams, queryParams }) => {
 
     const [activeFilter, setActiveFilter] = useState({
         size: '',
@@ -8,24 +9,33 @@ const ProductFilter = () => {
         price: '',
         brand: '',
         collection: ''
-    })
+    });
+
+    // console.log('activeFilter', activeFilter,);
+    // console.log('queryParams', queryParams);
+
+
 
     const productSizes = [
         {
             id: 1,
-            size: 's',
+            size: 'S',
         },
         {
             id: 2,
-            size: 'm',
+            size: 'M',
         },
         {
             id: 3,
-            size: 'l',
+            size: 'L',
         },
         {
             id: 4,
-            size: 'xl',
+            size: 'XL',
+        },
+        {
+            id: 5,
+            size: 'XXL',
         },
     ]
 
@@ -75,19 +85,51 @@ const ProductFilter = () => {
     const productPrices = [
         {
             id: 1,
-            price: '0-50',
+            values: '0-50',
+            minPrice: 0,
+            maxPrice: 50,
         },
         {
             id: 2,
-            price: '50-100',
+            values: '50-100',
+            minPrice: 50,
+            maxPrice: 100,
         },
         {
             id: 3,
-            price: '100-150',
+            values: '100-150',
+            minPrice: 100,
+            maxPrice: 150,
         },
         {
             id: 4,
-            price: '150-200',
+            values: '150-200',
+            minPrice: 150,
+            maxPrice: 200,
+        },
+        {
+            id: 5,
+            values: '200-250',
+            minPrice: 200,
+            maxPrice: 250,
+        },
+        {
+            id: 6,
+            values: '250-300',
+            minPrice: 250,
+            maxPrice: 300,
+        },
+        {
+            id: 7,
+            values: '300-400',
+            minPrice: 300,
+            maxPrice: 400,
+        },
+        {
+            id: 8,
+            values: '400-500',
+            minPrice: 400,
+            maxPrice: 500,
         },
     ];
 
@@ -147,11 +189,16 @@ const ProductFilter = () => {
                             <button
                                 key={sizeItem?.id}
                                 className={`text-[#8a8a8a] text-base w-[42px] h-[42px] flex items-center justify-center border-[2px] border-[#8a8a8a] rounded-lg cursor-pointer capitalize ${activeFilter?.size === sizeItem?.size && 'border-red-500 border-[4px]'}`}
-                                onClick={() => setActiveFilter({
-                                    ...activeFilter,
-                                    size: sizeItem?.size
-                                    ,
-                                })}
+                                onClick={() => {
+                                    setActiveFilter({
+                                        ...activeFilter,
+                                        size: sizeItem?.size,
+                                    })
+                                    setQueryParams({
+                                        ...queryParams,
+                                        size: sizeItem?.size,
+                                    });
+                                }}
                             >
                                 {sizeItem?.size}
                             </button>
@@ -172,10 +219,16 @@ const ProductFilter = () => {
                                 style={{
                                     backgroundColor: `#${colorItem?.color}`
                                 }}
-                                onClick={() => setActiveFilter({
-                                    ...activeFilter,
-                                    color: colorItem?.color
-                                })}
+                                onClick={() => {
+                                    setActiveFilter({
+                                        ...activeFilter,
+                                        color: colorItem?.color
+                                    });
+                                    setQueryParams({
+                                        ...queryParams,
+                                        color: '#'+colorItem?.color,
+                                    });
+                                }}
                             ></button>
                         ))
                     }
@@ -190,12 +243,19 @@ const ProductFilter = () => {
                         productPrices?.map((priceItem) => (
                             <button
                                 key={priceItem?.id}
-                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.price === priceItem?.price && 'text-red-500 underline'}`}
-                                onClick={() => setActiveFilter({
-                                    ...activeFilter,
-                                    price: priceItem?.price
-                                })}
-                            >{priceItem?.price}</button>
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.price === priceItem?.values && 'text-red-500 underline'}`}
+                                onClick={() => {
+                                    setActiveFilter({
+                                        ...activeFilter,
+                                        price: priceItem?.values
+                                    });
+                                    setQueryParams({
+                                        ...queryParams,
+                                        minPrice: priceItem?.minPrice,
+                                        maxPrice: priceItem?.maxPrice,
+                                    });
+                                }}
+                            >{priceItem?.values}</button>
                         ))
                     }
                 </div>
@@ -210,10 +270,17 @@ const ProductFilter = () => {
                             <button
                                 key={brandItem?.id}
                                 className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.brand === brandItem?.brand && 'text-red-500 underline'}`}
-                                onClick={() => setActiveFilter({
-                                    ...activeFilter,
-                                    brand: brandItem?.brand
-                                })}
+                                onClick={() => {
+                                    setActiveFilter({
+                                        ...activeFilter,
+                                        brand: brandItem?.brand
+                                    });
+                                    setQueryParams({
+                                        ...queryParams,
+                                        brand: brandItem?.brand,
+                                    });
+                                
+                                }}
                             >{brandItem?.brand}</button>
                         ))
                     }
@@ -226,10 +293,10 @@ const ProductFilter = () => {
                 <div className="flex flex-col items-start gap-3">
                     {
                         productCollections?.map((collectionItem) => (
-                            <button 
-                            key={collectionItem?.id} 
-                            className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize ${activeFilter?.collection === collectionItem?.collection && 'text-red-500 underline'}`}
-                            onClick={() => setActiveFilter({
+                            <button
+                                key={collectionItem?.id}
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize ${activeFilter?.collection === collectionItem?.collection && 'text-red-500 underline'}`}
+                                onClick={() => setActiveFilter({
                                     ...activeFilter,
                                     collection: collectionItem?.collection
                                 })}

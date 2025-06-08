@@ -24,7 +24,7 @@ import MyOrders from './Pages/Dashboard/UserPages/MyOrders/MyOrders'
 import MyCart from './Pages/Dashboard/UserPages/MyCart/MyCart'
 import MyWishlist from './Pages/Dashboard/UserPages/MyWishlist/MyWishlist'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { fetchSingleUser, userLogout } from './App/Features/User/userSlice'
 import UpdateProduct from './Pages/Dashboard/AdminPages/UpdateProduct/UpdateProduct'
 import DealsProduct from './Pages/Dashboard/AdminPages/DealsProduct/DealsProduct'
@@ -32,8 +32,7 @@ import UploadProfile from './Pages/Dashboard/UserPages/UploadProfile/UploadProfi
 
 function App() {
   const dispatch = useDispatch();
-  const { userLists, user } = useSelector((state) => state.users);
-  // console.log('app user check: ', user)
+
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -56,6 +56,26 @@ const Navbar = () => {
                                 <nav className='flex items-center gap-[3.5rem]'>
                                     <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>home</NavLink>
                                     <NavLink to={'/products'} className='text-base text-[#484848] capitalize font-normal font-poppins'>shop</NavLink>
+
+                                    <div>
+                                        <button className='text-base text-[#484848] capitalize font-normal font-poppins cursor-pointer'  popoverTarget="popover-1" style={{ anchorName: "--anchor-1" }}>
+                                            Pages +
+                                        </button>
+
+                                        <ul className="dropdown menu w-52 rounded-box bg-base-100 shadow-sm"
+                                            popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */}>
+                                            <li>
+                                                <NavLink to={'/best-sellers'} className='text-base text-[#484848] capitalize font-normal font-poppins'>Best Seller</NavLink>
+
+                                            </li>
+                                            <li>
+                                                <NavLink to={'/new-arrivals'} className='text-base text-[#484848] capitalize font-normal font-poppins'>new arrivals</NavLink>
+                                            </li>
+                                            <li>
+                                                <NavLink to={'/accessories'} className='text-base text-[#484848] capitalize font-normal font-poppins'>accessories</NavLink>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </nav>
                             )
 
@@ -74,19 +94,19 @@ const Navbar = () => {
 
                                     <div className="dropdown">
 
-                                                <div tabIndex={0} role="button">
-                                                    {
-                                                        user?.avatar?.url ? (
-                                                            <img className='w-[40px] h-[40px] rounded-full object-cover border-2 border-green-500 cursor-pointer' src={user?.avatar?.url} alt="" />
-                                                        )
-                                                        :
-                                                         
-                                                        (
+                                        <div tabIndex={0} role="button">
+                                            {
+                                                user?.avatar?.url ? (
+                                                    <img className='w-[40px] h-[40px] rounded-full object-cover border-2 border-green-500 cursor-pointer' src={user?.avatar?.url} alt="" />
+                                                )
+                                                    :
 
-                                                            <button className='cursor-pointer'><FaUser size={'1.5rem'} color='#484848' /></button>
-                                                        )
-                                                    }
-                                                </div>
+                                                    (
+
+                                                        <button className='cursor-pointer'><FaUser size={'1.5rem'} color='#484848' /></button>
+                                                    )
+                                            }
+                                        </div>
                                         {
                                             (isAuthenticated ?
 
@@ -102,7 +122,7 @@ const Navbar = () => {
                                 </div>
                                 {/* wishlist box  */}
                                 <div>
-                                    <Link className='cursor-pointer'><FaHeart size={'1.5rem'} color='#484848' /></Link>
+                                    <Link to={'/dashboard/user/wishlist'} className='cursor-pointer'><FaHeart size={'1.5rem'} color='#484848' /></Link>
                                 </div>
                                 {/* cart box  */}
                                 <div>
