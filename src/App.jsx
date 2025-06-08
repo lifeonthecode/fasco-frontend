@@ -33,7 +33,7 @@ import UploadProfile from './Pages/Dashboard/UserPages/UploadProfile/UploadProfi
 function App() {
   const dispatch = useDispatch();
   const { userLists, user } = useSelector((state) => state.users);
-  console.log('app user check: ', user)
+  // console.log('app user check: ', user)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,7 +50,7 @@ function App() {
 
   }, [dispatch]);
 
-  console.log('userLists: ', userLists)
+  // console.log('userLists: ', userLists)
 
   return (
     <>

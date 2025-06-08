@@ -167,15 +167,15 @@ const AddProduct = () => {
                                 <label htmlFor="sizes">Sizes</label>
                                 <select defaultValue="sizes" name='sizes' className="select select-secondary">
                                     <option disabled={true}>Sizes</option>
-                                    <option value={'sm'}>SM</option>
-                                    <option value={'md'}>MD</option>
-                                    <option value={'lg'}>LG</option>
-                                    <option value={'xl'}>XL</option>
-                                    <option value={'xxl'}>xxl</option>
-                                    <option value={'sm, md'}>SM, MD</option>
-                                    <option value={'sm, md, lg'}>SM, MD, LG</option>
-                                    <option value={'sm, md, lg, xl'}>SM, MD, LG, XL</option>
-                                    <option value={'sm, md, lg, xl, xxl'}>SM, MD, LG, XL, xxl</option>
+                                    <option value={'XS'}>XS</option>
+                                    <option value={'S'}>S</option>
+                                    <option value={'M'}>M</option>
+                                    <option value={'L'}>L</option>
+                                    <option value={'XL'}>XL</option>
+                                    <option value={'XXL'}>XXL</option>
+                                    <option value={'XS, S, M'}>XS, S, M</option>
+                                    <option value={'XL, XXL'}>XL, XXL</option>
+                                    <option value={'XS, S, M, L, Xl, XXL'}>XS, S, M, L, Xl, XXL</option>
                                 </select>
 
                             </div>

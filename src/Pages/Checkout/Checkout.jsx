@@ -11,11 +11,13 @@ const Checkout = () => {
 
     const dispatch = useDispatch();
     const { cartLists } = useSelector((state) => state.cart);
-    const { cart, subtotal, totalPrice, totalItems,totalDiscount } = cartLists;
+    const { cart, subtotal, totalPrice, totalItems, totalDiscount } = cartLists;
     const { user } = useSelector((state) => state.users);
-    const [deliveryCharge, setDeliveryCharge] = useState(50); // Default delivery charge
+    const [deliveryCharge, setDeliveryCharge] = useState(5); // Default delivery charge
     const [deliveryAddress, setDeliveryAddress] = useState({}); // Default delivery address
-    const [clientSecret, setClientSecret] = useState(''); // Default delivery address
+    const [clientSecret, setClientSecret] = useState(''); // Default client secret address
+    const [shippingAddress, setShippingAddress] = useState({});
+    const [disabled, setDisabled] = useState(false);
 
     // get cartItems 
     useEffect(() => {
@@ -24,23 +26,44 @@ const Checkout = () => {
 
     }, [dispatch, cart, user?._id]);
 
+    // console.log('cart', cart)
+
     const handlePaymentSuccess = async (e) => {
         e.preventDefault();
 
         try {
 
             const response = await axiosInstance.post('payment/create-payment-intent', {
-                amount:totalPrice,
+                amount: totalPrice,
                 shippingAddress: deliveryAddress.city,
             });
 
             console.log("Payment session created:", response.data);
-            setDeliveryCharge(response.data.deliveryCharge); // Update delivery charge from response
-            setClientSecret(response.data.clientSecret); // Update delivery charge from response
-            setDeliveryAddress(response.data.shippingAddress); // Update delivery address from response
-            // console.log("Payment processing...");
+            setDeliveryCharge(response.data.deliverFee);
+            setClientSecret(response.data.clientSecret);
+
+            toast.success("Order Confirmed", {
+                position: "top-right"
+            })
+
+
+            setShippingAddress({
+                user: user?._id,
+                products: cart?.products?.map((cart) => ({
+                    product: cart?.product?._id,       
+                    quantity: cart?.quantity, 
+                    selectedSize: cart?.selectedSize.toUpperCase(), 
+                    selectedColor: cart?.selectedColor,
+                })),
+                shippingAddress: deliveryAddress,
+
+            });
+
+            setDisabled(true);
+            e.target.reset() ; // Reset the form after successful payment
+
         } catch (error) {
-            toast.error("Payment failed. Please try again.", {
+            toast.error("Payment failed." +error.message, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -49,20 +72,17 @@ const Checkout = () => {
                 draggable: true,
                 progress: undefined,
             });
-            console.error("Payment error:", error);
         }
     };
 
     // console.log(cartLists)
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setDeliveryAddress({
             ...deliveryAddress,
             [name]: value
         });
     };
-
-    // console.log('deliveryAddress', deliveryAddress)
 
 
     return (
@@ -78,7 +98,7 @@ const Checkout = () => {
                     <div className='max-w-[550px] w-full h-auto flex flex-col gap-7'>
                         <h3 className='text-3xl text-black font-poppins font-semibold capitalize'>deliver details</h3>
                         <div className='w-full'>
-                            <form className='flex flex-col gap-6' onSubmit={handlePaymentSuccess}>
+                            <form className='flex flex-col gap-4' onSubmit={handlePaymentSuccess}>
 
                                 {/* first name box  */}
                                 <div className='w-full flex flex-col gap-2.5'>
@@ -93,6 +113,11 @@ const Checkout = () => {
                                     <input onChange={handleInputChange} className='w-full outline-0 text-base text-black font-poppins font-normal pl-3 border-[3px] border-[#dadada] rounded-xl h-[56px]' id='address' name="address" type="text" placeholder='Street Address' required />
                                 </div>
 
+                                {/* country box  */}
+                                <div className='w-full flex flex-col gap-2.5'>
+                                    <label htmlFor="country" className='text-base text-black font-poppins font-normal cursor-pointer'>Country*</label>
+                                    <input onChange={handleInputChange} className='w-full outline-0 text-base text-black font-poppins font-normal pl-3 border-[3px] border-[#dadada] rounded-xl h-[56px]' id='country' name="country" type="text" placeholder='Country' required />
+                                </div>
                                 {/* town/city box  */}
                                 <div className='w-full flex flex-col gap-2.5'>
                                     <label htmlFor="city" className='text-base text-black font-poppins font-normal cursor-pointer'>town/city*</label>
@@ -120,7 +145,7 @@ const Checkout = () => {
 
                                 {/* button box */}
                                 <div className='w-full flex flex-col gap-2.5'>
-                                    <button type="submit" className='w-full outline-0 text-base text-white font-poppins font-normal capitalize pl-3 rounded-xl h-[56px] cursor-pointer bg-black'>address confirm</button>
+                                    <button type="submit" className={`w-full outline-0 text-base text-white font-poppins font-normal capitalize pl-3 rounded-xl h-[56px] cursor-pointer bg-black ${disabled && 'bg-gray-500'}`} disabled={disabled}>{disabled ? 'Order confirmed' : 'Order Confirm'}</button>
                                 </div>
                             </form>
                         </div>
@@ -129,15 +154,15 @@ const Checkout = () => {
 
                     {/* right side wrapper  */}
                     <div className="flex flex-col gap-7 bg-white p-6 rounded shadow-md w-full max-w-md border">
-                        <div>
-
+                        <div className="flex flex-col gap-5">
+                            <h3 className='text-2xl text-black font-poppins font-bold capitalize'>your order</h3>
                             {
                                 cart?.products?.length > 0 ? (
                                     cart?.products?.map((item) => (
                                         <div key={item._id} className='flex items-center justify-between gap-5 mb-5 w-full '>
 
                                             <div className="flex flex-col gap-5 w-full">
-                                                <h3 className='text-2xl text-black font-poppins font-bold capitalize'>your order</h3>
+
                                                 <div className='flex items-center justify-between gap-3 w-full'>
                                                     <img src={item?.product?.images[0].url} alt={item?.name} className='w-[70px] h-[70px] object-cover rounded-lg' />
                                                     <h3 className='text-base text-black font-poppins font-medium capitalize'>Name: {item?.product?.name}</h3>
@@ -159,15 +184,15 @@ const Checkout = () => {
                                 <h3 className='text-base text-black font-poppins font-semibold capitalize'>discount: <span className='text-base text-black font-poppins font-medium'>${totalDiscount}</span></h3>
 
 
-                                <h3 className='text-base text-black font-poppins font-semibold capitalize'>delivery charge: <span className='text-base text-black font-poppins font-medium'>${deliveryCharge}</span></h3>
+                                <h3 className='text-base text-black font-poppins font-semibold capitalize'>delivery charge: <span className='text-base text-black font-poppins font-medium'>${deliveryCharge || 5}</span></h3>
 
-                                <h3 className='text-base text-black font-poppins font-semibold capitalize'>total Amount: <span className='text-base text-black font-poppins font-medium'>${totalPrice + parseInt(deliveryCharge) }</span></h3>
+                                <h3 className='text-base text-black font-poppins font-semibold capitalize'>total Amount: <span className='text-base text-black font-poppins font-medium'>${totalPrice + parseInt(deliveryCharge)}</span></h3>
                             </div>
                         </div>
 
                         {/* payment wrapper  */}
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm clientSecret={clientSecret} deliveryCharge={deliveryCharge} />
+                            <CheckoutForm clientSecret={clientSecret} shippingAddress={shippingAddress}   />
                         </Elements>
                     </div>
 
