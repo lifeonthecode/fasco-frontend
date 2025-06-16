@@ -28,13 +28,13 @@ export const userLogout = createAsyncThunk('users/userLogout', async () => {
 });
 
 // user delete only admin panel 
-export const userDelete = createAsyncThunk('users/userDelete', async ({id, public_id}) => {
-    const response = await axiosInstance.delete(`/user/user-delete/${id}/${public_id}`, );
+export const userDelete = createAsyncThunk('users/userDelete', async ({ id, public_id }) => {
+    const response = await axiosInstance.delete(`/user/user-delete/${id}/${public_id}`,);
     return response.data;
 });
 
 
-export const uploadProfilePicture = createAsyncThunk('users/uploadProfilePicture', async ({id,avatarForm}) => {
+export const uploadProfilePicture = createAsyncThunk('users/uploadProfilePicture', async ({ id, avatarForm }) => {
     const response = await axiosInstance.post(`/user/upload-profile/${id}`, avatarForm, {
         headers: {
             'Content-Type': 'multipart/form-data'
@@ -78,9 +78,9 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: ((builder) => {
         builder
-        // .addCase(fetchUsers.pending, (state) => {
-        //     state.loading = true
-        // })
+            .addCase(fetchUsers.pending, (state) => {
+                state.loading = true
+            })
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.userLists = action.payload.users;
                 state.loading = false
@@ -132,7 +132,7 @@ const userSlice = createSlice({
 
             .addCase(userLogout.pending, (state) => {
                 state.loading = true;
-                
+
             })
             .addCase(userLogout.fulfilled, (state) => {
                 state.loading = false;
@@ -150,7 +150,7 @@ const userSlice = createSlice({
 
             .addCase(userDelete.pending, (state) => {
                 state.loading = true;
-                
+
             })
             .addCase(userDelete.fulfilled, (state, action) => {
                 state.loading = false;
@@ -164,7 +164,7 @@ const userSlice = createSlice({
 
             .addCase(uploadProfilePicture.pending, (state) => {
                 state.loading = true;
-                
+
             })
             .addCase(uploadProfilePicture.fulfilled, (state, action) => {
                 state.loading = false;
