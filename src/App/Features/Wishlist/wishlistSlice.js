@@ -4,8 +4,11 @@ import axiosInstance from "../../Api/axiosInstance";
 // add a product to the wishlist
 export const addWishlist = createAsyncThunk(
     'wishlist/addWishlist',
-    async (wishlistData) => {
-        const response = await axiosInstance.post(`/wishlist/add-wishlist`, wishlistData);
+    async ({userId, productId}) => {
+        const response = await axiosInstance.post(`/wishlist/add-wishlist`, {
+            userId, 
+            productId
+        });
         return response.data;
 
     });
@@ -41,11 +44,9 @@ export const deleteAllWishlist = createAsyncThunk(
 const wishlistSlice = createSlice({
     name: "wishlist",
     initialState: {
-        wishlists: {
-            products: [],
-            totalItems: 0,
-        },
-        loading: false,
+        loading: true,
+        wishlists: [],
+        totalItems: 0,
         error: null,
     },
     reducers: {},
@@ -53,55 +54,51 @@ const wishlistSlice = createSlice({
         builder
             .addCase(addWishlist.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
             .addCase(addWishlist.fulfilled, (state) => {
                 state.loading = false;
             })
-            .addCase(addWishlist.rejected, (state, action) => {
+            .addCase(addWishlist.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
             })
 
             // get wishlist items
             .addCase(fetchWishlist.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
             .addCase(fetchWishlist.fulfilled, (state, action) => {
                 state.loading = false;
-                state.wishlists.products = action.payload.wishlist.products;
-                state.wishlists.totalItems = action.payload.totalWishlistItems;
+                state.wishlists = action.payload.wishlist;
+                state.totalItems = action.payload.totalWishlistItems;
             })
-            .addCase(fetchWishlist.rejected, (state, action) => {
+            .addCase(fetchWishlist.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
             })
 
             // delete single wishlist
             .addCase(deleteSingleWishlist.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
             .addCase(deleteSingleWishlist.fulfilled, (state) => {
                 state.loading = false;
+                state.wishlists = [];
+                state.totalItems = 0
             })
-            .addCase(deleteSingleWishlist.rejected, (state, action) => {
+            .addCase(deleteSingleWishlist.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
             })
 
             // delete all wishlist
             .addCase(deleteAllWishlist.pending, (state) => {
                 state.loading = true;
-                state.error = null;
             })
             .addCase(deleteAllWishlist.fulfilled, (state) => {
                 state.loading = false;
+                state.wishlists = [];
+                state.totalItems = 0
             })
-            .addCase(deleteAllWishlist.rejected, (state, action) => {
+            .addCase(deleteAllWishlist.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
             })
     },
 });

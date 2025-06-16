@@ -117,8 +117,6 @@ const ProductDetails = () => {
         }
     };
 
-    console.log('selectedProduct: ', selectedProduct)
-
 
     // add to cart handle 
     const handleAddToCart = async (id) => {
@@ -149,20 +147,20 @@ const ProductDetails = () => {
 
 
     // add to wishlist handle
-    const handleAddToWishlist = async (id) => {
+    const handleAddToWishlist = async (productId) => {
         try {
 
             if (!user?._id) {
                 throw new Error('Please login to add product to wishlist');
             }
-            const response = await dispatch(addWishlist({ userId: user?._id, productId: id })).unwrap();
+            const response = await dispatch(addWishlist({ userId: user?._id, productId})).unwrap();
             if (response.success) {
                 dispatch(fetchWishlist(user?._id));
                 toast.success(response.message, {
                     position: 'top-center'
                 })
-            } 
-            
+            }
+
         } catch (error) {
             toast.error(error.message, {
                 position: 'top-center'
@@ -173,7 +171,7 @@ const ProductDetails = () => {
 
     if (loading) {
         return <div className="flex items-center justify-center">
-            <p className="text-4xl text-green-700">Product Details Loading</p>
+            <span className="loading loading-spinner text-primary loading-xl"></span>
         </div>
     }
 
@@ -187,7 +185,6 @@ const ProductDetails = () => {
                             <div className='flex flex-col gap-3'>
                                 {
                                     product?.images?.map((image, index) => {
-                                        // console.log(image?.url, 'product details image')
                                         return (
                                             <button onClick={() => setActiveImage({
                                                 imageIndex: index
@@ -246,18 +243,13 @@ const ProductDetails = () => {
                                     }
                                 </p>
                                 <div className='flex items-center gap-3'>
-                                    {
-                                        product?.sizes?.map((size, index) => (
-                                            <button
-                                                key={index}
-                                                className='w-[45px] h-[45px] bg-[#eeeeee] rounded-lg flex items-center justify-center border-[#eeeeee] border-[2px] cursor-pointer uppercase'
-                                                onClick={() => selectProduct({
-                                                    ...selectedProduct,
-                                                    size: size
-                                                })}
-                                            >{size}</button>
-                                        ))
-                                    }
+                                    <button
+                                        className='w-[45px] h-[45px] bg-[#eeeeee] rounded-lg flex items-center justify-center border-[#eeeeee] border-[2px] cursor-pointer uppercase'
+                                        onClick={() => selectProduct({
+                                            ...selectedProduct,
+                                            size: product?.size
+                                        })}
+                                    >{product?.size}</button>
                                 </div>
                             </div>
 

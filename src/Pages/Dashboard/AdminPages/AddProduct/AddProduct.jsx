@@ -9,6 +9,7 @@ const AddProduct = () => {
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const dispatch = useDispatch();
+    const [selectedColors, setColors] = useState([]);
 
 
     // handle image change function 
@@ -21,10 +22,6 @@ const AddProduct = () => {
         setPreviewImages(previews);
     };
 
-    // const handleInputChange = (e) => {
-
-    // }
-
     const handleAddProduct = async (e) => {
         e.preventDefault();
 
@@ -32,20 +29,13 @@ const AddProduct = () => {
         const description = e.target.description.value;
         const originalPrice = e.target.originalPrice.value;
         const stock = e.target.stock.value;
-        const sizes = e.target.sizes.value.split(',');
+        const size = e.target.sizes.value;
         const discount = e.target.discount.value;
         const brand = e.target.brand.value;
         const category = e.target.category.value;
         const star = e.target.star.value;
         const dealsEndDate = e.target.dealEndDate.value;
 
-        const colors = [
-            e.target.color_1.value,
-            e.target.color_2.value,
-            e.target.color_3.value,
-            e.target.color_4.value,
-            e.target.color_5.value,
-        ];
 
         const productData = new FormData();
         productData.append("name", name);
@@ -56,10 +46,11 @@ const AddProduct = () => {
         productData.append("brand", brand);
         productData.append("category", category);
         productData.append("star", star);
+        productData.append("size", size);
 
         // Serialize arrays/objects
-        productData.append("sizes", JSON.stringify(sizes));
-        productData.append("colors", JSON.stringify(colors));
+        // productData.append("sizes", JSON.stringify(sizes));
+        productData.append("colors", JSON.stringify(selectedColors));
 
         const deals = {
             isDeals: dealsEndDate ? true : false,
@@ -73,9 +64,6 @@ const AddProduct = () => {
 
         try {
             const res = await dispatch(createProduct(productData)).unwrap();
-
-            console.log('product response: ', res)
-
             toast.success(res.message, { position: 'top-right' });
             dispatch(getProducts());
 
@@ -85,14 +73,77 @@ const AddProduct = () => {
             e.target.reset();
             setImages([]);
             setPreviewImages([]);
+            setColors([])
 
 
         } catch (error) {
-            console.error("Product add failed:", error);
             toast.error(error.message, { position: 'top-right' });
         }
     };
 
+
+    const productColors = [
+        {
+            id: 1,
+            color: '#ff6c6c',
+        },
+        {
+            id: 2,
+            color: '#000000',
+        },
+        {
+            id: 3,
+            color: '#6c7bff',
+        },
+        {
+            id: 4,
+            color: '#6ca7ff',
+        },
+        {
+            id: 5,
+            color: '#6cb9ff',
+        },
+        {
+            id: 6,
+            color: '#6cf6ff',
+        },
+        {
+            id: 7,
+            color: '#6cff9e',
+        },
+        {
+            id: 8,
+            color: '#6cffdc',
+        },
+        {
+            id: 9,
+            color: '#8a6cff',
+        },
+        {
+            id: 10,
+            color: '#9bff6c',
+        },
+    ];
+
+
+    const productBrands = [
+        {
+            id: 1,
+            brand: 'adidas',
+        },
+        {
+            id: 2,
+            brand: 'puma',
+        },
+        {
+            id: 3,
+            brand: 'nike',
+        },
+        {
+            id: 4,
+            brand: 'reebok',
+        }
+    ];
 
 
     return (
@@ -108,7 +159,7 @@ const AddProduct = () => {
                         {/* product and original price box  */}
 
                         <div>
-                            <label className="block mb-1 font-medium">Upload Images</label>
+                            <label className="block mb-1 text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize">Upload Images</label>
                             <input
                                 type="file"
                                 multiple
@@ -119,7 +170,7 @@ const AddProduct = () => {
                         </div>
 
                         {previewImages.length > 0 && (
-                            <div className="grid grid-cols-9 gap-4 mt-4">
+                            <div className="grid grid-cols-6 gap-4 mt-4">
                                 {previewImages.map((img, idx) => (
                                     <img
                                         key={idx}
@@ -141,7 +192,7 @@ const AddProduct = () => {
                             </div>
                             {/* product original price box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="originalPrice">Product original Price</label>
+                                <label htmlFor="originalPrice" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Product original Price</label>
                                 <input type="number" id='originalPrice' name='originalPrice' placeholder="Product Original Price" className="input input-success w-full" />
                             </div>
                         </div>
@@ -150,12 +201,12 @@ const AddProduct = () => {
                         <div className='flex items-center gap-5 justify-between'>
                             {/* product name box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="discount">Discount (Optional)</label>
+                                <label htmlFor="discount" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Discount (Optional)</label>
                                 <input type="number" name='discount' id='discount' placeholder="Product Discount" className="input input-success w-full" />
                             </div>
                             {/* product description box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="stock">Stock</label>
+                                <label htmlFor="stock" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Stock</label>
                                 <input type="number" name='stock' id='stock' placeholder="Product stock" className="input input-success w-full" />
                             </div>
                         </div>
@@ -164,8 +215,8 @@ const AddProduct = () => {
                         <div className='flex items-center gap-5 justify-between'>
                             {/* product sizes box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="sizes">Sizes</label>
-                                <select defaultValue="sizes" name='sizes' className="select select-secondary">
+                                <label htmlFor="sizes" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Sizes</label>
+                                <select defaultValue="XS" name='sizes' className="select select-secondary text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize">
                                     <option disabled={true}>Sizes</option>
                                     <option value={'XS'}>XS</option>
                                     <option value={'S'}>S</option>
@@ -173,26 +224,31 @@ const AddProduct = () => {
                                     <option value={'L'}>L</option>
                                     <option value={'XL'}>XL</option>
                                     <option value={'XXL'}>XXL</option>
-                                    <option value={'XS, S, M'}>XS, S, M</option>
-                                    <option value={'XL, XXL'}>XL, XXL</option>
-                                    <option value={'XS, S, M, L, Xl, XXL'}>XS, S, M, L, Xl, XXL</option>
                                 </select>
 
                             </div>
                             {/* product color box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="colors">Colors</label>
-                                <div className="flex items-center gap-4">
+                                <label htmlFor="colors" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize' >Colors</label>
+                                <div className="flex flex-wrap gap-6">
+                                    {
+                                        productColors?.map((colorItem) => (
+                                            <button type='button'
+                                                key={colorItem?.id}
+                                                className={`w-[50px] h-[50px] rounded-full cursor-pointer ${selectedColors.includes(colorItem.color) && 'border-[5px] border-red-500'}`}
+                                                style={{
+                                                    backgroundColor: colorItem?.color
+                                                }}
+                                                onClick={() => {
+                                                    setColors([
+                                                        ...selectedColors,
+                                                        colorItem.color
+                                                    ])
+                                                }}
 
-                                    <input type="color" name='color_1' placeholder="Product Colors" className="input input-success w-full" />
-
-                                    <input type="color" name='color_2' placeholder="Product Colors" className="input input-success w-full" />
-
-                                    <input type="color" name='color_3' placeholder="Product Colors" className="input input-success w-full" />
-
-                                    <input type="color" name='color_4' placeholder="Product Colors" className="input input-success w-full" />
-
-                                    <input type="color" name='color_5' placeholder="Product Colors" className="input input-success w-full" />
+                                            ></button>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -201,25 +257,45 @@ const AddProduct = () => {
                         <div className='flex items-center gap-5 justify-between'>
                             {/* product brand box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="brand">brand</label>
-                                <input type="text" name='brand' id='brand' placeholder="Product brand" className="input input-success w-full" />
+                                <div className='flex flex-col gap-2.5'>
+                                    <label htmlFor="brand" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer'>Brands</label>
+                                    <select defaultValue="adidas" name='brand' className="select select-secondary capitalize text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ">
+
+                                        {
+                                            productBrands?.map((brandItem) => (
+                                                <option value={brandItem?.brand}>{brandItem?.brand}</option>
+                                            ))
+                                        }
+                                    </select>
+
+                                </div>
                             </div>
+
+
                             {/* product category box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="category">Category</label>
-                                <input type="text" name='category' id='category' placeholder="Product category" className="input input-success w-full" />
+                                <label htmlFor="sizes" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer'>Categories</label>
+                                <select defaultValue="mens_fashion" name='category' className="select select-secondary text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize">
+                                    <option disabled={true}>Categories</option>
+                                    <option value={'mens_fashion'}>men's fashion</option>
+                                    <option value={'womens_fashion'}>women's fashion</option>
+                                    <option value={'women_accessories'}>women's accessories</option>
+                                    <option value={'men_accessories'}>men accessories</option>
+                                    <option value={'discount_deals'}>discount deals</option>
+                                </select>
+
                             </div>
                         </div>
                         {/* star and deals  */}
                         <div className='flex items-center gap-5 justify-between'>
                             {/* product star box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="star">star</label>
-                                <input type="number" name='star' id='star' placeholder="Product star" className="input input-success w-full" />
+                                <label htmlFor="star" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>star</label>
+                                <input type="text" name='star' id='star' placeholder="Product star" className="input input-success w-full" />
                             </div>
                             {/* product deals box  */}
                             <div className='flex flex-col gap-2.5 w-1/2'>
-                                <label htmlFor="dealEndDate">Deals (Optional)</label>
+                                <label htmlFor="dealEndDate" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Deals (Optional)</label>
                                 <input type="date" name='dealEndDate' id='deals' placeholder="Product deals" className="input input-success w-full" />
                             </div>
                         </div>
@@ -227,7 +303,7 @@ const AddProduct = () => {
                         <div className='flex items-center gap-5 justify-between'>
                             {/* product star box  */}
                             <div className='flex flex-col gap-2.5 w-full'>
-                                <label htmlFor="description">Description</label>
+                                <label htmlFor="description" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Description</label>
                                 <textarea placeholder="Description" name='description' id='description' className="textarea textarea-primary w-full"></textarea>
                             </div>
                         </div>

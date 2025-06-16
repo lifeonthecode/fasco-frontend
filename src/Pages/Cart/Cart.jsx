@@ -11,7 +11,7 @@ const Cart = () => {
     const { userId } = useParams();
     const [quantities, setQuantities] = useState({})
 
-    const { cart, totalPrice, subtotal, totalItems, totalDiscount, discount } = cartLists
+    const { cart: carts, totalPrice, subtotal, totalItems, totalDiscount, discount } = cartLists
     console.log(userId)
     useEffect(() => {
         dispatch(fetchCarts(userId));
@@ -21,14 +21,16 @@ const Cart = () => {
 
     // check products from cart length and set quantities
     useEffect(() => {
-        if (cart?.products?.length) {
-            const initialQuantities = cart?.products?.reduce((acc, item) => {
+        if (carts?.products?.length) {
+            const initialQuantities = carts?.products?.reduce((acc, item) => {
                 acc[item?._id] = item?.quantity;
                 return acc
             }, {});
             setQuantities(initialQuantities)
         }
-    }, [cart]);
+    }, [carts]);
+
+    console.log('cartList: ', cartLists)
 
 
     // handle update cart function 
@@ -116,7 +118,7 @@ const Cart = () => {
         <div className='w-full bg-white py-[70px]'>
 
             {
-                cart?.products?.length === 0 ? (
+                carts?.products?.length === 0 ? (
                     <div className="flex items-center justify-center w-full h-[400px]">
                         <h3 className="text-4xl text-black font-poppins font-semibold">Your cart is Empty</h3>
                     </div>
@@ -135,7 +137,7 @@ const Cart = () => {
                                 {/* cart wrapper  */}
                                 <div className="max-w-[715px] w-full flex flex-col gap-5 p-5 rounded-sm border-[#dadada] border-[1px]">
                                     {
-                                        cart?.products?.map((cart) => {
+                                        carts?.products?.map((cart) => {
 
                                             console.log('cart:', cart)
                                             return (

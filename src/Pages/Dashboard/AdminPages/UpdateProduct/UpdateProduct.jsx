@@ -2,28 +2,92 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, getSingleProduct, updateSingleProduct } from '../../../../App/Features/Product/productSlice';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+
+
+const productColors = [
+    {
+        id: 1,
+        color: '#ff6c6c',
+    },
+    {
+        id: 2,
+        color: '#000000',
+    },
+    {
+        id: 3,
+        color: '#6c7bff',
+    },
+    {
+        id: 4,
+        color: '#6ca7ff',
+    },
+    {
+        id: 5,
+        color: '#6cb9ff',
+    },
+    {
+        id: 6,
+        color: '#6cf6ff',
+    },
+    {
+        id: 7,
+        color: '#6cff9e',
+    },
+    {
+        id: 8,
+        color: '#6cffdc',
+    },
+    {
+        id: 9,
+        color: '#8a6cff',
+    },
+    {
+        id: 10,
+        color: '#9bff6c',
+    },
+];
+
+
+const productBrands = [
+    {
+        id: 1,
+        brand: 'adidas',
+    },
+    {
+        id: 2,
+        brand: 'puma',
+    },
+    {
+        id: 3,
+        brand: 'nike',
+    },
+    {
+        id: 4,
+        brand: 'reebok',
+    }
+];
 
 const UpdateProduct = () => {
 
+    const { id } = useParams();
     const { product } = useSelector((state) => state.product);
     const [images, setImages] = useState([]);
     const [updated, setUpdate] = useState(false);
-    const [previewImages, setPreviewImages] = useState(product?.images);
+    const [previewImages, setPreviewImages] = useState([]);
+    const [selectedColors, setColors] = useState(product?.colors || []);
     const dispatch = useDispatch();
-    const { id } = useParams();
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getSingleProduct(id))
     }, [dispatch, id]);
 
-    console.log('single product: ', product)
-
 
 
     // handle image change function 
     const handleImageChange = (e) => {
-        const files = Array.from(e.target.files) || product?.image;
+        const files = Array.from(e.target.files);
         setImages(files);
 
         // Preview
@@ -32,28 +96,19 @@ const UpdateProduct = () => {
     };
 
 
-
-    const handleAddProduct = async (e) => {
+    const handleUpdateProduct = async (e) => {
         e.preventDefault();
 
         const name = e.target.name.value;
         const description = e.target.description.value;
         const originalPrice = e.target.originalPrice.value;
         const stock = e.target.stock.value;
-        const sizes = e.target.sizes.value.split(',');
+        const size = e.target.sizes.value;
         const discount = e.target.discount.value;
         const brand = e.target.brand.value;
         const category = e.target.category.value;
         const star = e.target.star.value;
         const dealsEndDate = e.target.dealEndDate.value;
-
-        const colors = [
-            e.target.color_1.value,
-            e.target.color_2.value,
-            e.target.color_3.value,
-            e.target.color_4.value,
-            e.target.color_5.value,
-        ];
 
         const productData = new FormData();
         productData.append("name", name);
@@ -64,10 +119,9 @@ const UpdateProduct = () => {
         productData.append("brand", brand);
         productData.append("category", category);
         productData.append("star", star);
+        productData.append("size", size);
 
-        // Serialize arrays/objects
-        productData.append("sizes", JSON.stringify(sizes));
-        productData.append("colors", JSON.stringify(colors));
+        productData.append("colors", JSON.stringify(selectedColors));
 
         const deals = {
             isDeals: dealsEndDate ? true : false,
@@ -81,7 +135,7 @@ const UpdateProduct = () => {
 
 
         try {
-            const res = await dispatch(updateSingleProduct({id, productData})).unwrap();
+            const res = await dispatch(updateSingleProduct({ id, productData })).unwrap();
 
             console.log('update product: ', res)
 
@@ -94,7 +148,10 @@ const UpdateProduct = () => {
             e.target.reset();
             setImages([]);
             setPreviewImages([]);
-            setUpdate(true)
+            setUpdate(true);
+            setColors([]);
+
+            navigate(`/dashboard/admin/products`)
 
 
         } catch (error) {
@@ -120,11 +177,11 @@ const UpdateProduct = () => {
 
                         <div className="flex flex-col gap-8">
                             <div className='flex items-center justify-center'>
-                                <h3 className='text-4xl text-black font-semibold capitalize font-poppins'>Add Product</h3>
+                                <h3 className='text-4xl text-black font-semibold capitalize font-poppins'>update Product</h3>
                             </div>
 
                             <div>
-                                <form onSubmit={handleAddProduct} className='flex flex-col gap-4'>
+                                <form onSubmit={handleUpdateProduct} className='flex flex-col gap-4'>
                                     {/* product and original price box  */}
 
                                     <div>
@@ -135,11 +192,12 @@ const UpdateProduct = () => {
                                             accept="image/*"
                                             onChange={handleImageChange}
                                             className="w-full"
+                                            required
                                         />
                                     </div>
 
                                     {previewImages?.length > 0 && (
-                                        <div className="grid grid-cols-9 gap-4 mt-4 border-2 p-3 rounded-lg border-red-600">
+                                        <div className="grid grid-cols-6 gap-4 mt-4 border-2 p-3 rounded-lg border-red-600">
                                             {previewImages?.map((img, idx) => {
                                                 return (<img
                                                     key={idx}
@@ -184,33 +242,43 @@ const UpdateProduct = () => {
                                     <div className='flex items-center gap-5 justify-between'>
                                         {/* product sizes box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>
-                                            <label htmlFor="sizes">Sizes</label>
-                                            <select defaultValue={product?.sizes.toString()} name='sizes' className="select select-secondary uppercase">
-                                                <option default={true} disabled={true}>{product?.sizes.toString()}</option>
-                                                <option value={'sm'}>SM</option>
-                                                <option value={'md'}>MD</option>
-                                                <option value={'lg'}>LG</option>
-                                                <option value={'xl'}>XL</option>
-                                                <option value={'xxl'}>xxl</option>
-                                                <option value={'sm, md'}>SM, MD</option>
-                                                <option value={'sm, md, lg'}>SM, MD, LG</option>
-                                                <option value={'sm, md, lg, xl'}>SM, MD, LG, XL</option>
-                                                <option value={'sm, md, lg, xl, xxl'}>SM, MD, LG, XL, xxl</option>
+                                            <label htmlFor="sizes" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize'>Sizes</label>
+                                            <select defaultValue={product?.size} name='sizes' className="select select-secondary text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize">
+                                                <option disabled={true}>Sizes</option>
+                                                <option value={'XS'}>XS</option>
+                                                <option value={'S'}>S</option>
+                                                <option value={'M'}>M</option>
+                                                <option value={'L'}>L</option>
+                                                <option value={'XL'}>XL</option>
+                                                <option value={'XXL'}>XXL</option>
                                             </select>
 
                                         </div>
+
                                         {/* product color box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>
-                                            <label htmlFor="colors">Colors</label>
-                                            <div className="flex items-center gap-4">
-
+                                            <label htmlFor="colors" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize' >Colors</label>
+                                            <div className="flex flex-wrap gap-6">
                                                 {
-                                                    product?.colors?.map((color, index) => {
+                                                    productColors?.map((colorItem) => {
+                                                        return (
+                                                            <button type='button'
+                                                                key={colorItem?.id}
+                                                                className={`w-[50px] h-[50px] rounded-full cursor-pointer ${selectedColors.includes(colorItem.color) && 'border-[5px] border-red-500'}`}
+                                                                style={{
+                                                                    backgroundColor: colorItem?.color
+                                                                }}
+                                                                onClick={() => {
+                                                                    setColors([
+                                                                        ...selectedColors,
+                                                                        colorItem.color
+                                                                    ])
+                                                                }}
 
-                                                        return<input key={index} defaultValue={color} type="color" name={`color_${1 + index}`} placeholder="Product Colors" className="input input-success w-full" />
+                                                            ></button>
+                                                        )
                                                     })
                                                 }
-
                                             </div>
                                         </div>
                                     </div>
@@ -219,13 +287,30 @@ const UpdateProduct = () => {
                                     <div className='flex items-center gap-5 justify-between'>
                                         {/* product brand box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>
-                                            <label htmlFor="brand">Brand</label>
-                                            <input type="text" defaultValue={product?.brand} name='brand' id='brand' placeholder="Product brand" className="input input-success w-full" />
+                                            <div className='flex flex-col gap-2.5'>
+                                                <label htmlFor="brand" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer'>Brands</label>
+                                                <select defaultValue={product?.brand} name='brand' className="select select-secondary capitalize text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ">
+                                                    {
+                                                        productBrands?.map((brandItem) => (
+                                                            <option value={brandItem?.brand}>{brandItem?.brand}</option>
+                                                        ))
+                                                    }
+                                                </select>
+
+                                            </div>
                                         </div>
                                         {/* product category box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>
-                                            <label htmlFor="category">Category</label>
-                                            <input type="text" defaultValue={product?.category} name='category' id='category' placeholder="Product category" className="input input-success w-full" />
+                                            <label htmlFor="sizes" className='text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer'>Categories</label>
+                                            <select defaultValue={product?.category} name='category' className="select select-secondary text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize">
+                                                <option disabled={true}>Categories</option>
+                                                <option value={'mens_fashion'}>men's fashion</option>
+                                                <option value={'womens_fashion'}>women's fashion</option>
+                                                <option value={'women_accessories'}>women's accessories</option>
+                                                <option value={'men_accessories'}>men accessories</option>
+                                                <option value={'discount_deals'}>discount deals</option>
+                                            </select>
+
                                         </div>
                                     </div>
                                     {/* star and deals  */}
@@ -233,7 +318,7 @@ const UpdateProduct = () => {
                                         {/* product star box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>
                                             <label htmlFor="star">Star</label>
-                                            <input type="number" name='star' id='star' placeholder="Product star" defaultValue={product?.star} className="input input-success w-full" />
+                                            <input type="text" name='star' id='star' placeholder="Product star" defaultValue={product?.star} className="input input-success w-full" />
                                         </div>
                                         {/* product deals box  */}
                                         <div className='flex flex-col gap-2.5 w-1/2'>

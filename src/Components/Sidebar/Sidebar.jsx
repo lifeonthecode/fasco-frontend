@@ -17,6 +17,10 @@ const Sidebar = ({ user }) => {
     return <nav className="flex flex-col gap-6 text-3xl capitalize text-black">
         {
             user?.role === 'admin' ? <>
+                <NavLink to={'/dashboard'} className={({ isActive }) =>
+                    isActive ? 'px-4 py-3 bg-[#7e6fb3] text-white text-lg capitalize font-poppins font-medium rounded-xl text-center flex items-center gap-4' : 'text-[#9197b3] text-lg capitalize font-poppins font-medium flex items-center gap-4'
+                }><IoIosAddCircle size={'1.5rem'} />Dashboard</NavLink>
+
                 <NavLink to={'/dashboard/admin/add-product'} className={({ isActive }) =>
                     isActive ? 'px-4 py-3 bg-[#5932ea] text-white text-lg capitalize font-poppins font-medium rounded-xl text-center flex items-center gap-4' : 'text-[#9197b3] text-lg capitalize font-poppins font-medium flex items-center gap-4'
                 }><IoIosAddCircle size={'1.5rem'} /> add Product</NavLink>
@@ -35,9 +39,13 @@ const Sidebar = ({ user }) => {
                 }><LuUsersRound size={'1.5rem'} /> users</NavLink>
 
             </> : <>
+                <NavLink to={'/dashboard'} className={({ isActive }) =>
+                    isActive ? 'px-4 py-3 bg-[#7e6fb3]  text-white text-lg capitalize font-poppins font-medium rounded-xl text-center flex items-center gap-4' : 'text-[#9197b3] text-lg capitalize font-poppins font-medium flex items-center gap-4 '
+                }><IoIosAddCircle size={'1.5rem'} />Dashboard</NavLink>
+
                 <NavLink to={'/dashboard/user/orders'} className={({ isActive }) =>
                     isActive ? 'px-4 py-3 bg-[#5932ea] text-white text-lg capitalize font-poppins font-medium rounded-xl text-center flex items-center gap-4' : 'text-[#9197b3] text-lg capitalize font-poppins font-medium flex items-center gap-4'
-                }><GrDeliver size={'1.5rem'}  /> orders</NavLink>
+                }><GrDeliver size={'1.5rem'} /> orders</NavLink>
 
                 <NavLink to={'/dashboard/user/cart'} className={({ isActive }) =>
                     isActive ? 'px-4 py-3 bg-[#5932ea] text-white text-lg capitalize font-poppins font-medium rounded-xl text-center flex items-center gap-4' : 'text-[#9197b3] text-lg capitalize font-poppins font-medium flex items-center gap-4'

@@ -1,97 +1,51 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { FaShippingFast } from 'react-icons/fa';
+import { MdSell } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCarts } from '../../App/Features/Cart/cartSlice';
+import { fetchWishlist } from '../../App/Features/Wishlist/wishlistSlice';
+import { getAllOrdersByAdmin, getAllOrdersByUser } from '../../App/Features/Order/orderSlice';
+import UserPanel from '../../Components/userPanel/UserPanel';
+import AdminOverviewPanel from '../../Components/AdminOverviewPanel/AdminOverviewPanel';
+import { getByAdminAllProducts } from '../../App/Features/Product/productSlice';
+import { fetchUsers } from '../../App/Features/User/userSlice';
+
 
 const Dashboard = () => {
-    const {user} = useSelector(state => state.users);
+    const dispatch = useDispatch();
+    const { user, userLists } = useSelector(state => state.users);
+    const { cartLists, loading } = useSelector(state => state.cart);
+    const { adminCountTotalProducts } = useSelector(state => state.product);
+    const { wishlists, loading: wishlistLoading } = useSelector(state => state.wishlist);
+    const { adminOrders, totalOrders, totalRevenue, loading: orderLoading, orders } = useSelector(state => state.order);
+
+
+    useEffect(() => {
+        dispatch(fetchCarts(user?._id));
+        dispatch(fetchWishlist(user?._id));
+        dispatch(getAllOrdersByUser(user?._id));
+        dispatch(getAllOrdersByAdmin());
+        if(user?.role === 'admin') {
+            dispatch(getByAdminAllProducts());
+            dispatch(fetchUsers());
+        }
+    }, [dispatch, user]);
+
+    const totalUsers = userLists?.length || 0;
+
+
+    // console.log('wishlist: ', wishlists)
+
     return (
         <div>
-            <div className='py-4 px-6 border-[2px] border-[#00ac4f] rounded-lg mb-10'>
+            <div>
                 {
                     user?.role === 'admin' ? (
-                        <div className='flex items-center justify-between gap-8'>
-                            {/* total sell */}
-                            <div className='flex items-center justify-center gap-2.5'>
-                                <div>
-                                    <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><MdSell size={'42px'} color='white' /></button>
-                                </div>
-                                <div className='flex flex-col gap-2.5'>
-                                    <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>total sell</p>
-                                    <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>5000</h4>
-                                </div>
-                            </div>
-
-                            {/* total orders  */}
-                            <div className='flex items-center justify-center gap-2.5'>
-                                <div>
-                                    <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><FaShippingFast size={'42px'} color='white' /></button>
-                                </div>
-                                <div className='flex flex-col gap-2.5'>
-                                    <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>total orders</p>
-                                    <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>5000</h4>
-                                </div>
-                            </div>
-
-                            {/* new orders  */}
-                            <div className='flex items-center justify-center gap-2.5'>
-                                <div>
-                                    <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><FaShippingFast size={'42px'} color='white' /></button>
-                                </div>
-                                <div className='flex flex-col gap-2.5'>
-                                    <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>new orders</p>
-                                    <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>50</h4>
-                                </div>
-                            </div>
-
-                            {/* total users  */}
-                            <div className='flex items-center justify-center gap-2.5'>
-                                <div>
-                                    <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><FaUser size={'42px'} color='white' /></button>
-                                </div>
-                                <div className='flex flex-col gap-2.5'>
-                                    <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>total users</p>
-                                    <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>500</h4>
-                                </div>
-                            </div>
-
-                        </div>
+                        <AdminOverviewPanel loading={orderLoading} orders={adminOrders} totalOrders={totalOrders} totalRevenue={totalRevenue} totalProducts={adminCountTotalProducts} totalUsers={totalUsers} />
                     )
                         :
                         (
-                            <div className='flex items-center justify-between gap-8'>
-                                {/* total orders */}
-                                <div className='flex items-center justify-center gap-2.5'>
-                                    <div>
-                                        <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><MdSell size={'42px'} color='white' /></button>
-                                    </div>
-                                    <div className='flex flex-col gap-2.5'>
-                                        <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>total orders</p>
-                                        <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>10</h4>
-                                    </div>
-                                </div>
-
-                                {/* total carts  */}
-                                <div className='flex items-center justify-center gap-2.5'>
-                                    <div>
-                                        <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><FaShippingFast size={'42px'} color='white' /></button>
-                                    </div>
-                                    <div className='flex flex-col gap-2.5'>
-                                        <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>total carts</p>
-                                        <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>15</h4>
-                                    </div>
-                                </div>
-
-                                {/* total wishlist  */}
-                                <div className='flex items-center justify-center gap-2.5'>
-                                    <div>
-                                        <button className='w-[60px] h-[60px] rounded-full flex items-center justify-center bg-[#00ac4f] cursor-pointer'><FaShippingFast size={'42px'} color='white' /></button>
-                                    </div>
-                                    <div className='flex flex-col gap-2.5'>
-                                        <p className='text-lg text-[#acacac] font-poppins capitalize font-medium'>wishlist</p>
-                                        <h4 className='text-base font-semibold text-[#333333] capitalize font-poppins'>50</h4>
-                                    </div>
-                                </div>
-
-                            </div>
+                            <UserPanel user={user} loading={loading} wishlistLoading={wishlistLoading} wishlists={wishlists} orderLoading={orderLoading} orders={orders} cartLists={cartLists} />
                         )
                 }
             </div>

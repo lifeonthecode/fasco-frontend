@@ -111,10 +111,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.isAuthenticated = true;
             })
-            .addCase(userRegister.rejected, (state, action) => {
+            .addCase(userRegister.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
-
             })
 
             // user login 
@@ -126,10 +124,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.isAuthenticated = true;
             })
-            .addCase(userLogin.rejected, (state, action) => {
+            .addCase(userLogin.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message;
-
             })
 
             // user logout
@@ -160,9 +156,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.userLists = state.userLists.filter((user) => user._id !== action.meta.arg.id)
             })
-            .addCase(userDelete.rejected, (state, action) => {
+            .addCase(userDelete.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
             // upload profile picture
@@ -175,9 +170,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload
             })
-            .addCase(uploadProfilePicture.rejected, (state, action) => {
+            .addCase(uploadProfilePicture.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
 
@@ -189,9 +183,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload
             })
-            .addCase(forgetPassword.rejected, (state, action) => {
+            .addCase(forgetPassword.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
 
@@ -204,9 +197,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload
             })
-            .addCase(confirmOtpCode.rejected, (state, action) => {
+            .addCase(confirmOtpCode.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
 
@@ -217,9 +209,8 @@ const userSlice = createSlice({
             .addCase(newPassword.fulfilled, (state) => {
                 state.loading = false;
             })
-            .addCase(newPassword.rejected, (state, action) => {
+            .addCase(newPassword.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
             // resend otp code 
@@ -230,9 +221,8 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload
             })
-            .addCase(resendOtpCode.rejected, (state, action) => {
+            .addCase(resendOtpCode.rejected, (state) => {
                 state.loading = false;
-                state.error = action.error.message
             })
 
 

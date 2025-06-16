@@ -14,8 +14,8 @@ export const createProduct = createAsyncThunk('product/createProduct', async (pr
 
 
 // get products
-export const getProducts = createAsyncThunk('product/getProducts', async (queryParamsURL) => {
-    const response = await axiosInstance.get(`/product/products?${queryParamsURL}`);
+export const getProducts = createAsyncThunk('product/getProducts', async ({page, sizes, colors, priceRanges, brands, sort}) => {
+    const response = await axiosInstance.get(`/product/products?page=${page}&sizes=${JSON.stringify(sizes)}&colors=${JSON.stringify(colors)}&prices=${JSON.stringify(priceRanges)}&brands=${JSON.stringify(brands)}&sort=${sort}`);
     return response.data;
 });
 
@@ -49,21 +49,31 @@ export const deleteSingleProduct = createAsyncThunk('product/deleteSingleProduct
 
 
 
-// get best products 
-export const getBestProducts = createAsyncThunk('product/getBestProduct', async () => {
-    const response = await axiosInstance.get(`product/products/best-sellers`);
+export const fetchBestProducts = createAsyncThunk('fetchBestProducts', async () => {
+    const response = await axiosInstance.get(`product/best-seller/products`);
     return response.data;
-});
+})
+
+export const accessoriesProducts = createAsyncThunk('accessoriesProducts', async ({category}) => {
+    const response = await axiosInstance.get(`product/products/accessories?category=${category}`);
+    return response.data;
+})
 
 // get deals products 
 export const getDealsProducts = createAsyncThunk('product/getDealsProduct', async () => {
-    const response = await axiosInstance.get(`/products/deals`);
+    const response = await axiosInstance.get(`/product/products/deals`);
     return response.data;
 });
 
 // get deals products 
-export const productNewArrivals = createAsyncThunk('product/productNewArrivals', async () => {
-    const response = await axiosInstance.get(`/product/products/new-arrivals`);
+export const productNewArrivals = createAsyncThunk('product/productNewArrivals', async ({category}) => {
+    const response = await axiosInstance.get(`/product/products/new-arrivals?category=${category}`);
+    return response.data;
+});
+
+// get admin products 
+export const getByAdminAllProducts = createAsyncThunk('product/getByAdminAllProducts', async () => {
+    const response = await axiosInstance.get(`/product/admin/products`);
     return response.data;
 });
 
@@ -75,6 +85,12 @@ const productSlice = createSlice({
     initialState: {
         productList: {},
         product: null,
+        arrivals: [],
+        bestProducts: [],
+        accessories: [],
+        deals: [],
+        adminCountTotalProducts: 0,
+        adminProducts: [],
         loading: true,
         error: null,
         search: '',
@@ -106,9 +122,23 @@ const productSlice = createSlice({
         })
         .addCase(getProducts.fulfilled, (state, action) => {
             state.productList = action.payload;
+            
             state.loading = false
         })
         .addCase(getProducts.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message
+        })
+        // get admin products 
+        .addCase(getByAdminAllProducts.pending, (state) => {
+            state.loading = true
+        })
+        .addCase(getByAdminAllProducts.fulfilled, (state, action) => {
+            state.adminProducts = action.payload.products;
+            state.adminCountTotalProducts = action.payload.totalProducts;
+            state.loading = false
+        })
+        .addCase(getByAdminAllProducts.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message
         })
@@ -155,14 +185,14 @@ const productSlice = createSlice({
         })
 
         // get best products
-        .addCase(getBestProducts.pending, (state) => {
+        .addCase(fetchBestProducts.pending, (state) => {
             state.loading = true
         })
-        .addCase(getBestProducts.fulfilled, (state, action) => {
-            state.productList = action.payload;
+        .addCase(fetchBestProducts.fulfilled, (state, action) => {
+            state.bestProducts = action.payload.products;
             state.loading = false
         })
-        .addCase(getBestProducts.rejected, (state, action) => {
+        .addCase(fetchBestProducts.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message
         })
@@ -172,12 +202,11 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(getDealsProducts.fulfilled, (state, action) => {
-            state.productList = action.payload;
+            state.deals = action.payload.products;
             state.loading = false
         })
-        .addCase(getDealsProducts.rejected, (state, action) => {
+        .addCase(getDealsProducts.rejected, (state) => {
             state.loading = false;
-            state.error = action.error.message
         })
 
         // products new arrivals 
@@ -185,12 +214,22 @@ const productSlice = createSlice({
             state.loading = true
         })
         .addCase(productNewArrivals.fulfilled, (state, action) => {
-            state.productList = action.payload;
+            state.arrivals = action.payload.products;
             state.loading = false
         })
-        .addCase(productNewArrivals.rejected, (state, action) => {
+        .addCase(productNewArrivals.rejected, (state) => {
             state.loading = false;
-            state.error = action.error.message
+        })
+        // products accessories
+        .addCase(accessoriesProducts.pending, (state) => {
+            state.loading = true
+        })
+        .addCase(accessoriesProducts.fulfilled, (state, action) => {
+            state.accessories = action.payload.products;
+            state.loading = false
+        })
+        .addCase(accessoriesProducts.rejected, (state) => {
+            state.loading = false;
         })
 
 

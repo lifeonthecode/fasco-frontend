@@ -16,11 +16,8 @@ const MyCart = () => {
         }
     }, [user, dispatch]);
 
-    console.log(cartLists, "cartLists");
     const { cart, totalPrice } = cartLists;
 
-
-    console.log('totalPrice', totalPrice);
 
     return (
         <div className="p-6 bg-gray-50 min-h-screen">

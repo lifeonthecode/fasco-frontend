@@ -1,22 +1,24 @@
 import { useState } from "react";
+import { Link } from "react-router";
 
 
-const ProductFilter = ({ setQueryParams, queryParams }) => {
 
-    const [activeFilter, setActiveFilter] = useState({
-        size: '',
-        color: '',
-        price: '',
-        brand: '',
-        collection: ''
+const ProductFilter = ({ setColors, colors, setSizes, sizes, setBrands, brands, setPriceRanges, priceRanges }) => {
+
+    const [sizesActive, setSizesActive] = useState([])
+    const [colorsActive, setColorsActive] = useState([])
+    const [pricesActive, setPricesActive] = useState([])
+    const [brandsActive, setBrandsActive] = useState([])
+    const [collection, setCollection] = useState({
+        collection: '',
     });
-
-    // console.log('activeFilter', activeFilter,);
-    // console.log('queryParams', queryParams);
-
 
 
     const productSizes = [
+        {
+            id: 0,
+            size: 'XS',
+        },
         {
             id: 1,
             size: 'S',
@@ -157,28 +159,31 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
             id: 1,
             name: 'all products',
             collection: 'all_products',
+            link: '/products'
         },
         {
             id: 2,
             name: 'best sellers',
             collection: 'best_sellers',
+            link: '/best-seller'
         },
         {
             id: 3,
             name: 'new arrivals',
             collection: 'new_arrivals',
+            link: '/new-arrivals'
         },
         {
             id: 4,
             name: 'accessories',
             collection: 'accessories',
+            link: '/accessories'
         }
     ];
 
-    // console.log('activeFilter', activeFilter);
 
     return (
-        <div className="flex flex-col gap-8 max-w-[300px] w-full max-h-[1112px] h-full p-5 border-[1px] border-[#8a8a8a] rounded-lg">
+        <div className="flex flex-col gap-8 max-w-[300px] w-full max-h-[1200px] h-full p-5 border-[1px] border-[#8a8a8a] rounded-lg">
             <h3 className="text-3xl text-black font-normal capitalize">filters</h3>
             {/* size box  */}
             <div className="flex flex-col gap-4">
@@ -188,16 +193,16 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
                         productSizes?.map((sizeItem) => (
                             <button
                                 key={sizeItem?.id}
-                                className={`text-[#8a8a8a] text-base w-[42px] h-[42px] flex items-center justify-center border-[2px] border-[#8a8a8a] rounded-lg cursor-pointer capitalize ${activeFilter?.size === sizeItem?.size && 'border-red-500 border-[4px]'}`}
+                                className={`text-[#8a8a8a] text-base w-[42px] h-[42px] flex items-center justify-center border-[2px] border-[#8a8a8a] rounded-lg cursor-pointer capitalize ${sizesActive.includes(sizeItem?.size) && 'border-red-500 border-[4px]'}`}
                                 onClick={() => {
-                                    setActiveFilter({
-                                        ...activeFilter,
-                                        size: sizeItem?.size,
-                                    })
-                                    setQueryParams({
-                                        ...queryParams,
-                                        size: sizeItem?.size,
-                                    });
+                                    setSizesActive([
+                                        ...sizesActive,
+                                        sizeItem?.size
+                                    ]);
+                                    setSizes([
+                                        ...sizes,
+                                        sizeItem?.size
+                                    ])
                                 }}
                             >
                                 {sizeItem?.size}
@@ -215,19 +220,25 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
                         productColors?.map((colorItem) => (
                             <button
                                 key={colorItem?.id}
-                                className={`w-[40px] h-[40px] rounded-full cursor-pointer ${activeFilter?.color === colorItem?.color && 'border-[5px] border-red-500'}`}
+                                className={`w-[40px] h-[40px] rounded-full cursor-pointer ${colorsActive.includes('#' + colorItem?.color) && 'border-[5px] border-red-500'}`}
                                 style={{
-                                    backgroundColor: `#${colorItem?.color}`
+                                    backgroundColor: '#' + colorItem?.color
                                 }}
                                 onClick={() => {
-                                    setActiveFilter({
-                                        ...activeFilter,
-                                        color: colorItem?.color
-                                    });
-                                    setQueryParams({
-                                        ...queryParams,
-                                        color: '#'+colorItem?.color,
-                                    });
+                                    setColorsActive([
+                                        ...colorsActive,
+                                        '#' + colorItem?.color
+                                    ])
+
+
+                                    // console.log('update sizes: ', updatedSizes)
+
+                                    setColors([
+                                        ...colors,
+                                        colorItem.color,
+                                        // index+5
+
+                                    ])
                                 }}
                             ></button>
                         ))
@@ -243,17 +254,20 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
                         productPrices?.map((priceItem) => (
                             <button
                                 key={priceItem?.id}
-                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.price === priceItem?.values && 'text-red-500 underline'}`}
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${pricesActive.includes(priceItem?.values) && 'text-red-500 underline'}`}
                                 onClick={() => {
-                                    setActiveFilter({
-                                        ...activeFilter,
-                                        price: priceItem?.values
-                                    });
-                                    setQueryParams({
-                                        ...queryParams,
-                                        minPrice: priceItem?.minPrice,
-                                        maxPrice: priceItem?.maxPrice,
-                                    });
+
+                                    setPricesActive([
+                                        ...pricesActive,
+                                        priceItem?.values
+                                    ]);
+                                    setPriceRanges([
+                                        ...priceRanges,
+                                        {
+                                            maxPrice: priceItem?.maxPrice,
+                                            minPrice: priceItem?.minPrice,
+                                        }
+                                    ])
                                 }}
                             >{priceItem?.values}</button>
                         ))
@@ -269,17 +283,18 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
                         productBrands?.map((brandItem) => (
                             <button
                                 key={brandItem?.id}
-                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${activeFilter?.brand === brandItem?.brand && 'text-red-500 underline'}`}
+                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer ${brandsActive.includes(brandItem?.brand) && 'text-red-500 underline'}`}
                                 onClick={() => {
-                                    setActiveFilter({
-                                        ...activeFilter,
-                                        brand: brandItem?.brand
-                                    });
-                                    setQueryParams({
-                                        ...queryParams,
-                                        brand: brandItem?.brand,
-                                    });
-                                
+                                    setBrands([
+                                        ...brands,
+                                        brandItem?.brand,
+                                    ]);
+
+                                    setBrandsActive([
+                                        ...brandsActive,
+                                        brandItem?.brand
+                                    ])
+
                                 }}
                             >{brandItem?.brand}</button>
                         ))
@@ -292,15 +307,17 @@ const ProductFilter = ({ setQueryParams, queryParams }) => {
                 <h4 className="text-lg text-black font-normal capitalize">collections</h4>
                 <div className="flex flex-col items-start gap-3">
                     {
-                        productCollections?.map((collectionItem) => (
-                            <button
-                                key={collectionItem?.id}
-                                className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize ${activeFilter?.collection === collectionItem?.collection && 'text-red-500 underline'}`}
-                                onClick={() => setActiveFilter({
-                                    ...activeFilter,
-                                    collection: collectionItem?.collection
-                                })}
-                            >{collectionItem?.name}</button>
+                        productCollections?.map((collectionItem, index) => (
+                            <Link key={index} to={collectionItem?.link}>
+                                <button
+                                    key={collectionItem?.id}
+                                    className={`text-base text-[#8a8a8a] font-poppins font-semibold cursor-pointer capitalize ${collection?.collection === collectionItem?.collection && 'text-red-500 underline'}`}
+                                    onClick={() => setCollection({
+                                        ...collection,
+                                        collection: collectionItem?.collection
+                                    })}
+                                >{collectionItem?.name}</button>
+                            </Link>
                         ))
                     }
                 </div>

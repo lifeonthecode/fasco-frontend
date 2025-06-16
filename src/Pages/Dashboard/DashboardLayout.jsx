@@ -25,11 +25,15 @@ const DashboardLayout = () => {
 
                         <div className='flex flex-col gap-4'>
                             <h4 className='text-xl text-black font-semibold capitalize font-poppins'>Navigate Pages</h4>
-                            <nav className='flex flex-wrap items-center gap-4'>
+                            <nav className='flex flex-col gap-4'>
                                 <Link to={'/'} className='text-base text-black font-medium capitalize font-poppins underline'>Home</Link>
                                 <Link to={'/products'} className='text-base text-black font-medium capitalize font-poppins underline'>shop</Link>
 
-                                <Link to={'/products'} className='text-base text-black font-medium capitalize font-poppins underline'>best products</Link>
+                                <Link to={'/best-seller'} className='text-base text-black font-medium capitalize font-poppins underline'>best products</Link>
+
+                                <Link to={'/new-arrivals'} className='text-base text-black font-medium capitalize font-poppins underline'>new arrivals</Link>
+
+                                <Link to={'/accessories'} className='text-base text-black font-medium capitalize font-poppins underline'>accessories</Link>
                             </nav>
                         </div>
 

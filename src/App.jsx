@@ -29,6 +29,11 @@ import { fetchSingleUser, userLogout } from './App/Features/User/userSlice'
 import UpdateProduct from './Pages/Dashboard/AdminPages/UpdateProduct/UpdateProduct'
 import DealsProduct from './Pages/Dashboard/AdminPages/DealsProduct/DealsProduct'
 import UploadProfile from './Pages/Dashboard/UserPages/UploadProfile/UploadProfile'
+import BestSeller from './Pages/BestSeller/BestSeller';
+import NewArrivals from './Pages/NewArrivals/NewArrivals'
+import Accessories from './Pages/Accessories/Accessories'
+import Dashboard from './Pages/Dashboard/Dashboard'
+import Order from './Pages/Dashboard/AdminPages/Order/Order'
 
 function App() {
   const dispatch = useDispatch();
@@ -64,10 +69,14 @@ function App() {
             <Route path='/products/:id' element={<ProductDetails />} />
             <Route path='/cart/:userId' element={<Cart />} />
             <Route path='/checkout' element={<Checkout />} />
+            <Route path='/best-seller' element={<BestSeller />} />
+            <Route path='/new-arrivals' element={<NewArrivals />} />
+            <Route path='/accessories' element={<Accessories />} />
 
             {/* dashboard  */}
 
             <Route path='/dashboard' element={<DashboardLayout />}>
+            <Route index element={<Dashboard/>} />
 
               {/* admin routes  */}
               <Route path='admin/users' element={
@@ -95,6 +104,14 @@ function App() {
 
                 </AdminRoute>
               } />
+              <Route path='admin/order/:id' element={
+                <AdminRoute>
+                  <Order/>
+
+                </AdminRoute>
+              } />
+
+
               <Route path='admin/update/:id' element={
                 <AdminRoute>
                   <UpdateProduct />

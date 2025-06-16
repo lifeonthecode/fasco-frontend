@@ -7,7 +7,8 @@ const MyOrders = () => {
 
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.users);
-    const { orderLists, loading } = useSelector((state) => state.order);
+    const { orders, loading } = useSelector((state) => state.order);
+
 
     useEffect(() => {
         // Fetch all orders for the user when the component mounts
@@ -19,9 +20,9 @@ const MyOrders = () => {
     }, [user, dispatch]);
     // console.log(orderLists, "orderLists");
 
-    const handleCanceledOrder = async(orderId) => {
+    const handleCanceledOrder = async (orderId) => {
         try {
-            
+
             // Dispatch an action to cancel the order
             const response = await dispatch(cancelledOrderByUser(orderId)).unwrap();
             // Handle the response if needed
@@ -32,15 +33,18 @@ const MyOrders = () => {
             // console.log("Order cancelled:", orderId);
 
         } catch (error) {
-            toast.error("Failed to cancel order. Please try again."+ error.message);
+            toast.error("Failed to cancel order. Please try again." + error.message);
         }
     }
+
 
     return (
         <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">All Orders</h2>
             {loading ? (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center">
+                    <span className="loading loading-spinner text-primary loading-xl"></span>
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -80,7 +84,7 @@ const MyOrders = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orderLists?.orders?.map((order) => (
+                            {orders?.map((order) => (
                                 <tr key={order._id} className="text-sm text-gray-700">
                                     <td className="py-3 px-4 border-b">{order?._id}</td>
                                     <td className="py-3 px-4 border-b">
@@ -91,8 +95,8 @@ const MyOrders = () => {
                                         </span>
                                     </td>
                                     <td className="py-3 px-4 border-b">
-                                        <p className="text-lg text-black font-medium capitalize font-poppins">
-                                            {order?.paymentMethod}
+                                        <p className="text-lg text-black font-medium capitalize font-poppins bg-green-400 px-4 py-2 rounded text-center">
+                                            {order?.isPaid ? 'Paid' : 'unpaid'}
                                         </p>
 
                                     </td>
@@ -107,7 +111,7 @@ const MyOrders = () => {
                                         </p>
                                     </td>
                                     <td className="py-3 px-4 border-b">
-                                        <button onClick={() =>handleCanceledOrder(order?._id)}  className="text-lg text-black font-medium capitalize font-poppins px-4 py-2 bg-red-500 rounded cursor-pointer">cancelled</button>
+                                        <button disabled={order?.orderStatus === 'cancelled' ? true : false} onClick={() => handleCanceledOrder(order?._id)} className={`text-lg text-black font-medium capitalize font-poppins px-4 py-2 rounded cursor-pointer ${order?.orderStatus === 'cancelled' ? 'bg-gray-500' : 'bg-red-500'}`}>cancelled</button>
                                     </td>
                                 </tr>
                             ))}

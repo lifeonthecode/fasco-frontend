@@ -16,7 +16,6 @@ export const createOrder = createAsyncThunk('order/createOrder', async (orderDat
 
 // get only user orders thunk
 export const getAllOrdersByUser = createAsyncThunk('order/getAllOrdersByUser', async (userId) => {
-    console.log(userId, "userId in order slice");
     const response = await axiosInstance.get(`/order/orders/${userId}`);
     return response.data;
 });
@@ -30,8 +29,22 @@ export const cancelledOrderByUser = createAsyncThunk('order/cancelledOrderByUser
     const response = await axiosInstance.put(`/order/user-order-cancelled/${orderId}`);  
     return response.data;
 });
-export const  updateOrderStatusByAdmin= createAsyncThunk('order/updateOrderStatusByAdmin', async (orderId) => {
-    const response = await axiosInstance.put(`/order/update-order-status-only-admin/${orderId}`);  
+
+
+export const  updateOrderStatusByAdmin= createAsyncThunk('order/updateOrderStatusByAdmin', async ({orderId, orderStatus}) => {
+    const response = await axiosInstance.put(`/order/update-order-status-only-admin/${orderId}`, {orderStatus});  
+    return response.data;
+});
+
+// get single order only admin and user
+export const  getSingleOrder= createAsyncThunk('order/getSingleOrder', async (id) => {
+    const response = await axiosInstance.get(`/order/order/${id}`);  
+    return response.data;
+});
+
+// delete single order only admin 
+export const  deleteSingleOrder= createAsyncThunk('order/deleteSingleOrder', async (id) => {
+    const response = await axiosInstance.delete(`/order/delete/order/${id}`);  
     return response.data;
 });
 
@@ -39,7 +52,12 @@ export const  updateOrderStatusByAdmin= createAsyncThunk('order/updateOrderStatu
 const orderSlice = createSlice({
     name: "order",
     initialState: {
-        orderLists: null,
+        totalRevenue: 0,
+        totalItems: 0,
+        orders: [],
+        adminOrders: [],
+        order: {},
+        totalOrders: 0,
         loading: false,
         error: null,
     },
@@ -68,7 +86,8 @@ const orderSlice = createSlice({
             })
             .addCase(getAllOrdersByUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.orderLists = action.payload; // Assuming payload contains the order details
+                state.orders = action.payload.orders;
+                state.totalItems = action.payload.totalItems
             })
             .addCase(getAllOrdersByUser.rejected, (state, action) => {
                 state.loading = false;
@@ -83,7 +102,9 @@ const orderSlice = createSlice({
             })
             .addCase(getAllOrdersByAdmin.fulfilled, (state, action) => {
                 state.loading = false;
-                state.orderLists = action.payload; // Assuming payload contains the order details
+                state.adminOrders = action.payload.orders;
+                state.totalOrders = action.payload.totalOrders;
+                state.totalRevenue = action.payload.totalRevenue
             })
             .addCase(getAllOrdersByAdmin.rejected, (state, action) => {
                 state.loading = false;
@@ -116,6 +137,32 @@ const orderSlice = createSlice({
             .addCase(updateOrderStatusByAdmin.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+
+            // get single order 
+            .addCase(getSingleOrder.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getSingleOrder.fulfilled, (state, action) => {
+                state.loading = false;
+                state.order = action.payload.order
+            })
+            .addCase(getSingleOrder.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            // get single order 
+            .addCase(deleteSingleOrder.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteSingleOrder.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(deleteSingleOrder.rejected, (state) => {
+                state.loading = false;
             });
     },
 });

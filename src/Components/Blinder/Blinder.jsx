@@ -22,7 +22,7 @@ const Blinder = () => {
                         <p className='text-base text-[#767676] font-poppins font-normal mb-5 max-w-[515px] w-full'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero pariatur perspiciatis, rem iusto hic nihil!</p>
                         <p className='text-base text-[#767676] font-poppins font-normal capitalize'>size: <span className='inline-block px-4 py-1 bg-black rounded-sm text-white ml-3 mb-5'>m</span></p>
                         <p className='text-2xl text-black mb-5'>$1000.00</p>
-                        <Link to={'/shop'} className='text-base text-white font-poppins font-medium capitalize px-6 py-2.5 bg-black rounded-lg max-w-[207px] w-full h-auto flex items-center justify-center'>buy now</Link>
+                        <Link to={'/products'} className='text-base text-white font-poppins font-medium capitalize px-6 py-2.5 bg-black rounded-lg max-w-[207px] w-full h-auto flex items-center justify-center'>buy now</Link>
                     </div>
                 </div>
 

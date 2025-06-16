@@ -11,17 +11,11 @@ const Product = () => {
     const { productList, loading } = useSelector((state) => state.product);
     const [page, setPage] = useState(1); // state for current page
     const [pages, setPages] = useState(1); // state for total pages
-    const [queryParams, setQueryParams] = useState({
-        page: page,
-        limit: 3,
-        sort: '',
-        search: '',
-        brand: '',
-        color: '',
-        size: '',
-        minPrice: '',
-        maxPrice: ''
-    }); // state for query parameters
+    const [priceRanges, setPriceRanges] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [brands, setBrands] = useState([]);
+    const [sort, setSort] = useState('');
 
     const [activeGrid, setActiveGrid] = useState({
         grid: 'grid-cols-3',
@@ -48,34 +42,31 @@ const Product = () => {
 
         },
     ];
-    const queryParamsURL = new URLSearchParams(queryParams).toString();
 
     useEffect(() => {
         const fetchAllProducts = async () => {
-            const response = await dispatch(getProducts(queryParamsURL)).unwrap();
+            const response = await dispatch(getProducts({ page, sizes, colors, priceRanges, brands, sort })).unwrap();
             setPages(response?.pages);
             setPage(response?.page);
         };
 
         fetchAllProducts()
-    }, [dispatch, queryParamsURL]);
+    }, [dispatch, page, sizes, colors, priceRanges, brands, sort]);
 
     const { products } = productList
 
     const handleSortChange = (e) => {
-        setQueryParams({
-            ...queryParams,
-            sort: e.target.value
-        })
-
+        setSort(
+            e.target.value
+        );
     }
 
 
     return (
-        <div className="w-full pt-[50px]">
+        <div className="w-full pt-[10px]">
             <div className="lg:container mx-auto">
                 {/* section header  */}
-                <div className="pb-[100px] w-full flex items-center justify-center">
+                <div className="pb-[60px] w-full flex items-center justify-center">
                     <h3 className="text-3xl text-black font-normal capitalize">fashion</h3>
                 </div>
 
@@ -83,7 +74,7 @@ const Product = () => {
                 {/* product wrapper */}
                 <div className="flex justify-between gap-10 pb-[70px]">
                     {/* filter wrapper  */}
-                    <ProductFilter setQueryParams={setQueryParams} queryParams={queryParams} />
+                    <ProductFilter setSizes={setSizes} sizes={sizes} setColors={setColors} colors={colors} setPriceRanges={setPriceRanges} setBrands={setBrands} brands={brands} priceRanges={priceRanges} />
 
                     {/* products wrapper  */}
                     <div className="w-full h-auto flex flex-col gap-8">
@@ -126,16 +117,31 @@ const Product = () => {
                         </div>
 
                         {/* product grid  */}
-                        {
-                            loading ? <div className="flex items-center justify-center">
-                                <span className="loading loading-spinner text-primary loading-xl"></span>
-                            </div>
-                                :
 
-                                <div className={`grid ${activeGrid.grid} gap-6`}>
-                                    <ProductCard products={products} />
-                                </div>
-                        }
+                        <div>
+
+                            {
+                                products?.length > 0 ? (
+
+                                    loading ? <div className="flex items-center justify-center">
+                                        <span className="loading loading-spinner text-primary loading-xl"></span>
+                                    </div>
+                                        :
+
+                                        <div className={`grid ${activeGrid.grid} gap-6`}>
+                                            <ProductCard products={products} />
+                                        </div>
+                                )
+                                    :
+
+                                    (
+                                        <div className="flex items-center justify-center">
+                                            <span className="loading loading-spinner text-primary loading-xl"></span>
+                                        </div>
+                                    )
+                            }
+                        </div>
+
                     </div>
                 </div>
 
@@ -145,7 +151,9 @@ const Product = () => {
                     <div className="flex gap-2 5 mt-6">
                         <button onClick={() => {
                             if (page > 1) {
-                                setPage(page - 1);
+                                setPage(
+                                    page - 1
+                                );
                             }
                         }} className="w-[45px] h-[45px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowBack size={'1.5rem'} color="black" /></button>
                         <div className="flex items-center gap-5">
@@ -163,7 +171,9 @@ const Product = () => {
                         </div>
                         <button onClick={() => {
                             if (page < pages) {
-                                setPage(page + 1);
+                                setPage(
+                                    page + 1
+                                );
                             }
                         }} className="w-[45px] h-[45px] rounded-full bg-[#f3f3f3] flex items-center justify-center cursor-pointer"><IoIosArrowForward size={'1.5rem'} color="black" /></button>
                     </div>

@@ -1,11 +1,18 @@
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { accessoriesProducts } from '../../App/Features/Product/productSlice';
+import { FaStar } from 'react-icons/fa';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
-import { useState } from "react";
-import { FaStar } from "react-icons/fa";
+const Accessories = () => {
+    const dispatch = useDispatch();
+    const { accessories, loading } = useSelector((state) => state.product);
+    const [activeCategory, setCategory] = useState('mens_fashion');
 
 
-const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
-    const [slice, setSlice] = useState(6)
-
+    useEffect(() => {
+        dispatch(accessoriesProducts({ category: activeCategory })).unwrap();
+    }, [dispatch, activeCategory]);
 
     const newArrivalsCategories = [
         {
@@ -34,74 +41,13 @@ const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
             category: "discount_deals"
         },
     ];
-
-    // const newArrivalProducts = [
-    //     {
-    //         id: 1,
-    //         name: 'shiny dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 20,
-    //         image: '/arrivals/arrival_1.png',
-    //         rating: 4.5,
-    //         stock: 10,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'long dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 50,
-    //         image: '/arrivals/arrival_2.png',
-    //         rating: 5,
-    //         stock: 5,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'full sweater',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 80,
-    //         image: '/arrivals/arrival_3.png',
-    //         rating: 3.5,
-    //         stock: 15,
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'white dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 90,
-    //         image: '/arrivals/arrival_4.png',
-    //         rating: 3,
-    //         stock: 1,
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'colorful dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 100,
-    //         image: '/arrivals/arrival_5.png',
-    //         rating: 2,
-    //         stock: 1,
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'white shirt',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 50,
-    //         image: '/arrivals/arrival_6.png',
-    //         rating: 2.5,
-    //         stock: 0,
-    //     },
-    // ];
-
-    const filteringProducts = products.slice(0, slice);
-
     return (
-        <div className="w-full bg-white pt-[150px] pb-[150px]">
+        <div className="w-full bg-white pt-[20px] pb-[50px]">
             <div className="lg:container mx-auto">
 
                 {/* header title  */}
                 <div className="text-center mb-10">
-                    <h3 className="text-3xl text-[#484848] font-normal capitalize mb-5">new arrivals</h3>
-                    <p className="text-base text-[#8a8a8a] font-poppins font-normal">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.</p>
+                    <h3 className="text-3xl text-[#484848] font-normal capitalize mb-5">Accessories</h3>
                 </div>
 
                 {/* categories  */}
@@ -126,8 +72,8 @@ const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
                         :
                         <div className="grid grid-cols-3 gap-8">
                             {
-                                filteringProducts?.map((product) => (
-                                    <div key={product?._id} className="bg-white shadow-lg p-5 rounded-md ">
+                                accessories?.map((product) => (
+                                    <div key={product.id} className="bg-white shadow-lg p-5 rounded-md ">
                                         <div className="w-full max-h-[244px] h-full mb-2.5">
                                             <img className="w-full h-full object-cover rounded-md" src={product?.images[0]?.url} alt={product?.name} />
                                         </div>
@@ -151,7 +97,7 @@ const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
                                                 <p className="text-2xl text-[#484848] font-poppins font-medium">${product?.discountPrice}</p>
                                                 {
                                                     product?.stock > 0 ?
-                                                        <span className="text-base text-[#ff4646] font-poppins capitalize font-normal">stock:{product?.stock}</span>
+                                                        <span className="text-base text-[#ff4646] font-poppins capitalize font-medium">stock: {product?.stock}</span>
 
                                                         :
                                                         <span className="text-base text-[#ff4646] font-poppins capitalize font-normal">almost sold out</span>
@@ -163,19 +109,9 @@ const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
                             }
                         </div>
                 }
-
-
-                {/* all arrivals products  */}
-                {
-                    products.length > 6 && <div className="mt-10 flex items-center justify-center">
-                        <button className="text-base text-white font-poppins font-normal capitalize px-8 py-2.5 bg-black rounded-md cursor-pointer"
-                            onClick={() => setSlice(0)}
-                        >view more</button>
-                    </div>
-                }
             </div>
         </div>
     );
 };
 
-export default NewArrival;
+export default Accessories;

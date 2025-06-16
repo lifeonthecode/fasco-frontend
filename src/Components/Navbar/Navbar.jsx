@@ -47,7 +47,7 @@ const Navbar = () => {
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>deals</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>new arrivals</NavLink>
                                 <NavLink to={'/'} className='text-base text-[#484848] capitalize font-normal font-poppins'>packages</NavLink>
-                                <NavLink to={'/login'} className='text-base text-[#484848] capitalize font-normal font-poppins block'>sign in</NavLink>
+                                <NavLink to={!isAuthenticated && '/login'} className='text-base text-[#484848] capitalize font-normal font-poppins block'>sign in</NavLink>
 
                                 <NavLink to={'/register'} className='text-base capitalize font-normal font-poppins px-6 py-2.5 bg-black text-white rounded-lg'>sign up</NavLink>
                             </nav>
@@ -63,9 +63,9 @@ const Navbar = () => {
                                         </button>
 
                                         <ul className="dropdown menu w-52 rounded-box bg-base-100 shadow-sm"
-                                            popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */}>
+                                            popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } }>
                                             <li>
-                                                <NavLink to={'/best-sellers'} className='text-base text-[#484848] capitalize font-normal font-poppins'>Best Seller</NavLink>
+                                                <NavLink to={'/best-seller'} className='text-base text-[#484848] capitalize font-normal font-poppins'>Best Seller</NavLink>
 
                                             </li>
                                             <li>
