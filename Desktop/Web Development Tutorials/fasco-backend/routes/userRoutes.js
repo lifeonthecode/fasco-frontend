@@ -11,7 +11,7 @@ const userRouter = express.Router();
 userRouter.get('/get-user',  authMiddleware, getUserSingle);
 
 // get users by admin route
-userRouter.post('/get-users',  authMiddleware, adminMiddleware, getAllUsers);
+userRouter.get('/get-users',  authMiddleware, adminMiddleware, getAllUsers);
 
 // user register route 
 userRouter.post('/register',  userRegister);
@@ -26,17 +26,17 @@ userRouter.post('/logout', authMiddleware, userLogout);
 userRouter.post('/upload-profile/:id', authMiddleware, upload.single('avatar'), uploadUserProfile);
 
 // user delete route. delete user by admin
-userRouter.post('/user-delete/:id', authMiddleware, adminMiddleware ,userDelete);
+userRouter.post('/user-delete/:id/:public_id', authMiddleware, adminMiddleware ,userDelete);
 
 // user password forget route
-userRouter.post('/user-forget-password', forgetPassword);
+userRouter.post('/forget-password', forgetPassword);
 
 
 // user confirm otp code route
 userRouter.post('/confirm-otp-code/:id', confirmOtpCode);
 
 // user new password route
-userRouter.post('/user-new-password/:id', userNewPassword);
+userRouter.post('/new-password/:id', userNewPassword);
 
 // user resend otp code route
 userRouter.post('/resend-otp-code/:userId', resendOtpCode);

@@ -7,20 +7,12 @@ const sendEmail = require("../utils/sendEmail");
 
 const getUserSingle = async (req, res) => {
     try {
-        const user = await User.findById({_id: req.user._id}).select('-password -resetOtp');
-
-        if (!user) {
-            return res.status(404).json({
-                message: 'User not found',
-                success: false
-            });
-        }
 
         res.status(200).json(
             {
                 message: 'User found successfully',
                 success: true,
-                user
+                user: req.user
             }
         )
         
@@ -39,6 +31,8 @@ const getAllUsers = async (req, res) => {
         const users = await User.find(
             { role: { $ne: 'admin' } } // Exclude admin users
         ).select('-password -resetOtp');
+        // const users = await User.find().select('-password -resetOtp');
+
         if (!users || users.length === 0) {
             return res.status(404).json({
                 message: 'No users found',
@@ -143,8 +137,9 @@ const userLogin = async (req, res) => {
                     success: false
                 }
             )
-        }
+        };
 
+        
         const matchPassword = await bcryptjs.compare(password, user.password);
         if (!matchPassword) {
             return res.status(403).json(
@@ -154,6 +149,7 @@ const userLogin = async (req, res) => {
                 }
             )
         };
+
 
         const token = await generateToken(user._id, '7d');
 
@@ -184,7 +180,7 @@ const userLogin = async (req, res) => {
 const userLogout = async (req, res) => {
     try {
 
-        res.clearCookie('access_token', {
+        res.clearCookie('token', {
             httpOnly: true,
             secure: false,
             sameSite: 'strict',
@@ -192,7 +188,7 @@ const userLogout = async (req, res) => {
         });
 
         res.status(200).json({
-            message: 'User successfully logged out',    
+            message: 'Successfully logged out',    
             success: true
         });
 
@@ -213,6 +209,7 @@ const uploadUserProfile = async (req, res) => {
 
         const { id } = req.params;
         const { path, filename } = req.file;
+
         if (!id) {
             return res.status(400).json(
                 {
@@ -368,8 +365,7 @@ const confirmOtpCode = async (req, res) => {
         const { id } = req.params;
         const { otp } = req.body;
 
-
-        if (!email || !otp) {
+        if (!id || !otp) {
             return res.status(400).json(
                 {
                     message: 'Email and OTP are required',
@@ -377,6 +373,9 @@ const confirmOtpCode = async (req, res) => {
                 }
             )
         };
+
+
+        console.log('otp: ', otp)
 
 
         const user = await User.findOne({ _id: id, resetOtp: otp });
@@ -406,8 +405,8 @@ const confirmOtpCode = async (req, res) => {
 
 const userNewPassword = async (req, res) => {
     try {
-        const { newPassword, otp } = req.body;
         const { id} = req.params;
+        const { newPassword, otp } = req.body;
 
         if (!newPassword || !otp) {
             return res.status(400).json(
@@ -422,6 +421,7 @@ const userNewPassword = async (req, res) => {
             _id: id,
             resetOtp: otp
         });
+
         if (!user) {
             return res.status(404).json(
                 {

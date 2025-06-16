@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "fasco",
-        "Mern"
-    ]
+        "Mern",
+        "virtuals"
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
 }
