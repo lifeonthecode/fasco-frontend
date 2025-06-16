@@ -13,8 +13,6 @@ const AllUsers = () => {
         dispatch(fetchUsers());
     }, [dispatch]);
 
-    console.log('user Lists: ', userLists)
-
     const handleUserDelete = async (id, public_id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -40,8 +38,8 @@ const AllUsers = () => {
     }
 
     if (loading) {
-        return <div className="flex items-center justify-between">
-            <p className="text-5xl text-blue-500">User Loading</p>
+        return <div className="flex items-center justify-center">
+            <span className="loading loading-spinner text-primary loading-xl"></span>
         </div>
     }
 
@@ -51,23 +49,35 @@ const AllUsers = () => {
                 <h3 className="text-3xl font-semibold text-black font-poppins">Users</h3>
             </header>
 
-            <div className="flex flex-col gap-6">
-                {
-                    userLists?.map((user) => (
-                        <div key={user?._id} className="flex items-center justify-between p-4 border border-red-500 rounded-lg">
-                            <div>
-                                <h3 className="text-base text-black font-medium capitalize font-poppins">{user?.name}</h3>
-                            </div>
-                            <div>
-                                <h3 className="text-base text-black font-medium font-poppins">{user?.email}</h3>
-                            </div>
-                            <div>
-                                <button onClick={() => handleUserDelete(user?._id, user?.avatar?.public_id)} className="text-bas font-medium font-poppins capitalize px-4 py-3 bg-red-500 rounded-lg text-white cursor-pointer">delete</button>
-                            </div>
+            {
+                loading ? <div className="flex items-center justify-center">
+                    <span className="loading loading-spinner text-primary loading-xl"></span>
+                </div>
+
+                    :
+
+                    (
+
+                        <div className="flex flex-col gap-6">
+                            {
+                                userLists?.map((user) => (
+                                    <div key={user?._id} className="flex items-center justify-between p-4 border border-red-500 rounded-lg">
+                                        <div>
+                                            <h3 className="text-base text-black font-medium capitalize font-poppins">{user?.name}</h3>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base text-black font-medium font-poppins">{user?.email}</h3>
+                                        </div>
+                                        <div>
+                                            <button onClick={() => handleUserDelete(user?._id, user?.avatar?.public_id)} className="text-bas font-medium font-poppins capitalize px-4 py-3 bg-red-500 rounded-lg text-white cursor-pointer">delete</button>
+                                        </div>
+                                    </div>
+                                ))
+                            }
                         </div>
-                    ))
-                }
-            </div>
+                    )
+            }
+
         </section>
     );
 };

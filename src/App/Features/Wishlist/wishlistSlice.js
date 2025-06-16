@@ -35,7 +35,7 @@ export const deleteSingleWishlist = createAsyncThunk(
 export const deleteAllWishlist = createAsyncThunk(
     'wishlist/deleteAllWishlist',
     async (userId) => {
-        const response = await axiosInstance.delete(`/delete-all-wishlist/${userId}`);
+        const response = await axiosInstance.delete(`/wishlist/delete-all-wishlist/${userId}`);
         return response.data;
 
     });

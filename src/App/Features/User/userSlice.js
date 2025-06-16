@@ -29,7 +29,7 @@ export const userLogout = createAsyncThunk('users/userLogout', async () => {
 
 // user delete only admin panel 
 export const userDelete = createAsyncThunk('users/userDelete', async ({id, public_id}) => {
-    const response = await axiosInstance.delete(`/user-delete/${id}/${public_id}`, );
+    const response = await axiosInstance.delete(`/user/user-delete/${id}/${public_id}`, );
     return response.data;
 });
 

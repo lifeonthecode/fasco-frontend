@@ -155,7 +155,6 @@ const UpdateProduct = () => {
 
 
         } catch (error) {
-            console.error("Product add failed:", error);
             toast.error(error.message, { position: 'top-right' });
         }
     };

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSingleWishlist, fetchWishlist } from '../../../../App/Features/Wishlist/wishlistSlice';
+import { deleteAllWishlist, deleteSingleWishlist, fetchWishlist } from '../../../../App/Features/Wishlist/wishlistSlice';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router';
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const MyWishlist = () => {
     const dispatch = useDispatch();
@@ -15,17 +16,36 @@ const MyWishlist = () => {
 
     // Function to remove a product from the wishlist
     const removeFromWishlist = async (productId) => {
-        await dispatch(deleteSingleWishlist({ userId: user._id, productId })).unwrap();
+        try {
+            const res = await dispatch(deleteSingleWishlist({ userId: user._id, productId })).unwrap();
+            dispatch(fetchWishlist(user?._id)); // Refresh wishlist after deletion
+            toast.success(res?.message, {'position': 'top-center'});
 
-        dispatch(fetchWishlist(user?._id)); // Refresh wishlist after deletion
-
-        toast.success("Product removed from wishlist successfully!");
+        } catch (error) {
+            toast.error(error.message, {'position': 'top-center'})
+        }
     };
+
+    // handle all wishlist remove 
+    const handleAllWishlistRemove = async (id) => {
+        try {
+
+            const res = await dispatch(deleteAllWishlist(id)).unwrap();
+            toast.success(res?.message, {'position': 'top-center'});
+            dispatch(fetchWishlist(user?._id)); // Refresh wishlist after deletion
+            
+        } catch (error) {
+            toast.error(error.message, {'position': 'top-center'})
+        }
+    }
 
 
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
-            <h2 className="text-2xl font-bold mb-4">My Wishlist {totalItems > 0 && (totalItems)}</h2>
+            <div className='flex justify-between pb-6'>
+                <h2 className="text-2xl font-bold mb-4">My Wishlist {totalItems > 0 && (totalItems)}</h2>
+                <button onClick={() => handleAllWishlistRemove(user?._id)} className='cursor-pointer flex items-center gap-2 text-2xl font-poppins font-semibold capitalize px-4 py-2 bg-black rounded'><FaRegTrashAlt color='red' size={'1.5rem'} /></button>
+            </div>
 
 
 
