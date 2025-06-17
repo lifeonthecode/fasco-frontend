@@ -12,7 +12,7 @@ const Checkout = () => {
     const dispatch = useDispatch();
     const { cartLists } = useSelector((state) => state.cart);
     const { cart, subtotal, totalPrice, totalItems, totalDiscount } = cartLists;
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
     const [deliveryCharge, setDeliveryCharge] = useState(5); // Default delivery charge
     const [deliveryAddress, setDeliveryAddress] = useState({}); // Default delivery address
     const [clientSecret, setClientSecret] = useState(''); // Default client secret address

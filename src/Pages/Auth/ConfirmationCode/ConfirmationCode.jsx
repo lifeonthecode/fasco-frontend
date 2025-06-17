@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { confirmOtpCode, resendOtpCode } from "../../../App/Features/User/userSlice";
 import { toast } from "react-toastify";
+import { confirmOtpCode, resendOtpCode } from "../../../App/Features/Auth/authSlice";
 
 const ConfirmationCode = () => {
 

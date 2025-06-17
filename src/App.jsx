@@ -25,7 +25,6 @@ import MyCart from './Pages/Dashboard/UserPages/MyCart/MyCart'
 import MyWishlist from './Pages/Dashboard/UserPages/MyWishlist/MyWishlist'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { fetchSingleUser, userLogout } from './App/Features/User/userSlice'
 import UpdateProduct from './Pages/Dashboard/AdminPages/UpdateProduct/UpdateProduct'
 import DealsProduct from './Pages/Dashboard/AdminPages/DealsProduct/DealsProduct'
 import UploadProfile from './Pages/Dashboard/UserPages/UploadProfile/UploadProfile'
@@ -34,6 +33,7 @@ import NewArrivals from './Pages/NewArrivals/NewArrivals'
 import Accessories from './Pages/Accessories/Accessories'
 import Dashboard from './Pages/Dashboard/Dashboard'
 import Order from './Pages/Dashboard/AdminPages/Order/Order'
+import { fetchSingleUser, userLogout } from './App/Features/Auth/authSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -42,7 +42,6 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-
         dispatch(fetchSingleUser())
 
       } catch (error) {

@@ -13,7 +13,8 @@ import { fetchUsers } from '../../App/Features/User/userSlice';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const { user, userLists } = useSelector(state => state.users);
+    const {  userLists } = useSelector(state => state.users);
+    const { user} = useSelector(state => state.auth);
     const { cartLists, loading } = useSelector(state => state.cart);
     const { adminCountTotalProducts } = useSelector(state => state.product);
     const { wishlists, loading: wishlistLoading } = useSelector(state => state.wishlist);

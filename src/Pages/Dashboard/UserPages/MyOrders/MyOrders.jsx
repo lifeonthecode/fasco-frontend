@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const MyOrders = () => {
 
     const dispatch = useDispatch()
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
     const { orders, loading } = useSelector((state) => state.order);
 
 
@@ -30,7 +30,6 @@ const MyOrders = () => {
                 toast.success("Order cancelled successfully!");
                 dispatch(getAllOrdersByUser(user?._id)); // Refresh the order list
             }
-            // console.log("Order cancelled:", orderId);
 
         } catch (error) {
             toast.error("Failed to cancel order. Please try again." + error.message);

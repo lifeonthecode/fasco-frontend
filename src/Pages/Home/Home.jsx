@@ -22,8 +22,6 @@ const Home = () => {
         dispatch(productNewArrivals({category: activeCategory}))
     }, [dispatch , activeCategory] );
 
-    // console.log('home: ', activeCategory)
-
     return (
         <div>
 

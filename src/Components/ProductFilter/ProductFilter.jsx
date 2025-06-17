@@ -230,14 +230,9 @@ const ProductFilter = ({ setColors, colors, setSizes, sizes, setBrands, brands, 
                                         '#' + colorItem?.color
                                     ])
 
-
-                                    // console.log('update sizes: ', updatedSizes)
-
                                     setColors([
                                         ...colors,
                                         colorItem.color,
-                                        // index+5
-
                                     ])
                                 }}
                             ></button>

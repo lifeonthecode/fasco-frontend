@@ -7,7 +7,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 const MyWishlist = () => {
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
     const { wishlists, totalItems, loading } = useSelector((state) => state.wishlist);
 
     useEffect(() => {

@@ -3,12 +3,9 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router';
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdSell } from "react-icons/md";
-import { FaShippingFast } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
 
 const DashboardLayout = () => {
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
 
     return (
         <div className='min-h-screen bg-white pt-[30px] pb-[50px]'>

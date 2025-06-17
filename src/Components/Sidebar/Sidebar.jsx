@@ -6,9 +6,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaProductHunt } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
 import { LuUsersRound } from "react-icons/lu";
-import { MdBrowserUpdated } from "react-icons/md";
-import { CiDiscount1 } from "react-icons/ci";
-import { FaUserCircle } from "react-icons/fa";
+
 
 
 const Sidebar = ({ user }) => {

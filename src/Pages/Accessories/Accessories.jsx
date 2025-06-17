@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { accessoriesProducts } from '../../App/Features/Product/productSlice';
 import { FaStar } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const Accessories = () => {
     const dispatch = useDispatch();

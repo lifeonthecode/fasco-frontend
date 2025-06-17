@@ -17,8 +17,6 @@ const AllOrders = () => {
 
     const handleDeleteOrder = async (id) => {
 
-        console.log('id: ', id)
-
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",

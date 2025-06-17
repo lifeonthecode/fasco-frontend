@@ -5,13 +5,12 @@ import { FaHeart, FaUser } from "react-icons/fa";
 import { BsMinecartLoaded } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { fetchSingleUser, userLogout } from '../../App/Features/User/userSlice';
+import { fetchSingleUser, userLogout } from '../../App/Features/Auth/authSlice';
 
 const Navbar = () => {
     const location = useLocation();
     const dispatch = useDispatch()
-    const { user, isAuthenticated } = useSelector(state => state.users);
-    // console.log('navbar user check: ', user, 'isAuthenticated: ', isAuthenticated)
+    const { user, isAuthenticated } = useSelector(state => state.auth);
 
     const handleLogout = async () => {
         try {

@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { fetchSingleUser, newPassword } from '../../../App/Features/User/userSlice';
 import { useDispatch } from 'react-redux';
+import { fetchSingleUser, newPassword } from '../../../App/Features/Auth/authSlice';
 
 const NewPassword = () => {
 

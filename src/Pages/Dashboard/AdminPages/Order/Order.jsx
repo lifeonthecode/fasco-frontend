@@ -8,7 +8,6 @@ const Order = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { order } = useSelector(state => state.order);
-    // const [orderStatus, setOrderStatus] = useState('')
 
     useEffect(() => {
 
@@ -18,7 +17,6 @@ const Order = () => {
 
 
     const handleUpdateOrderStatus = async (orderId, orderStatus) => {
-        console.log('id: ', id, "orderStatus: ", orderStatus)
         try {
             const res = await dispatch(updateOrderStatusByAdmin({orderId, orderStatus})).unwrap();
             toast.success(res.message, { position: 'top-right' });
@@ -29,9 +27,6 @@ const Order = () => {
         }
     }
 
-    // console.log('order: ', order);
-
-    // console.log('order status: ', orderStatus)
 
     return (
         <div className="p-6">

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { fetchSingleUser, uploadProfilePicture } from '../../../../App/Features/User/userSlice';
 import { useParams } from 'react-router';
+import { uploadProfilePicture } from './../../../../App/Features/User/userSlice';
+import { fetchSingleUser } from '../../../../App/Features/Auth/authSlice';
 
 const UploadProfile = () => {
     const dispatch = useDispatch();
     const [avatar, setAvatar] = useState(null);
     const [preview, setPreview] = useState(null);
-    const {user} = useSelector((state) => state.users);
-    console.log(user)
     const {id} = useParams()
 
     const handleImageChange = (e) => {

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { forgetPassword } from '../../../App/Features/User/userSlice';
+import { forgetPassword } from '../../../App/Features/Auth/authSlice';
 
 const ForgetPassword = () => {
     const dispatch = useDispatch()
@@ -22,7 +22,6 @@ const ForgetPassword = () => {
             toast.success(response.message, {
                 position: 'top-right'
             });
-            console.log('response: ', response)
             // clear ui data 
             emailRef.current.value = '';
 

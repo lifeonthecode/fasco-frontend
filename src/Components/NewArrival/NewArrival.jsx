@@ -35,63 +35,6 @@ const NewArrival = ({ products, loading, activeCategory, setCategory }) => {
         },
     ];
 
-    // const newArrivalProducts = [
-    //     {
-    //         id: 1,
-    //         name: 'shiny dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 20,
-    //         image: '/arrivals/arrival_1.png',
-    //         rating: 4.5,
-    //         stock: 10,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'long dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 50,
-    //         image: '/arrivals/arrival_2.png',
-    //         rating: 5,
-    //         stock: 5,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'full sweater',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 80,
-    //         image: '/arrivals/arrival_3.png',
-    //         rating: 3.5,
-    //         stock: 15,
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'white dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 90,
-    //         image: '/arrivals/arrival_4.png',
-    //         rating: 3,
-    //         stock: 1,
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'colorful dress',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 100,
-    //         image: '/arrivals/arrival_5.png',
-    //         rating: 2,
-    //         stock: 1,
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'white shirt',
-    //         description: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem, necessitatibus.',
-    //         price: 50,
-    //         image: '/arrivals/arrival_6.png',
-    //         rating: 2.5,
-    //         stock: 0,
-    //     },
-    // ];
-
     const filteringProducts = products.slice(0, slice);
 
     return (

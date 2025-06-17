@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 const MyCart = () => {
 
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
     const { cartLists } = useSelector((state) => state.cart);
     useEffect(() => {
         // Fetch cart items for the user when the component mounts

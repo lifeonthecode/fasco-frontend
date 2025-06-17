@@ -13,8 +13,6 @@ const Deals = () => {
         dispatch(getDealsProducts())
     }, [dispatch]);
 
-    // console.log(deals, 'deals')
-
     return (
         <div className="w-full min-h-[782px] bg-white mt-[100px] py-10">
             <div className="lg:container mx-auto">

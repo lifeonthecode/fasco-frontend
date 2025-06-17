@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
-import {  fetchSingleUser, userRegister } from '../../../App/Features/User/userSlice';
 import { toast } from 'react-toastify';
+import { fetchSingleUser, userRegister } from '../../../App/Features/Auth/authSlice';
 
 const Register = () => {
 

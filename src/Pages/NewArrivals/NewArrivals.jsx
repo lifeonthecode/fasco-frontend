@@ -7,10 +7,8 @@ const NewArrivals = () => {
     const dispatch = useDispatch();
     const { arrivals, loading } = useSelector((state) => state.product);
     const [activeCategory, setCategory] = useState('mens_fashion');
-    // const [slice, setSlice] = useState(6)
 
     useEffect(() => {
-        // dispatch(getNewArrivals({category: activeCategory}))
         dispatch(productNewArrivals({ category: activeCategory }))
     }, [dispatch, activeCategory]);
 

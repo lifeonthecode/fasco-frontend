@@ -1,12 +1,12 @@
 import React, {useRef } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { fetchSingleUser, userLogin } from '../../../App/Features/User/userSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSingleUser, userLogin } from '../../../App/Features/Auth/authSlice';
 
 const Login = () => {
-
     const dispatch = useDispatch();
+    const {user} = useSelector(state => state.auth)
     const emailRef = useRef()
     const passwordRef = useRef()
     const navigate = useNavigate()
@@ -32,7 +32,7 @@ const Login = () => {
             passwordRef.current.value = '';
 
             // let's go product page 
-            navigate('/products')
+            navigate(user?.role === 'admin' ? '/dashboard' :'/products');
 
         } catch (error) {
 

@@ -10,30 +10,6 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { createOrder } from '../../App/Features/Order/orderSlice';
 
-// const cardTypes = [
-//     {
-//         name: 'Mastercard',
-//         value: 'mastercard',
-//         icon: 'https://img.icons8.com/color/48/mastercard-logo.png',
-//     },
-//     {
-//         name: 'Visa',
-//         value: 'visa',
-//         icon: 'https://img.icons8.com/color/48/visa.png',
-//     },
-//     {
-//         name: 'Amex',
-//         value: 'amex',
-//         icon: 'https://img.icons8.com/color/48/amex.png',
-//     },
-//     {
-//         name: 'Discover',
-//         value: 'discover',
-//         icon: 'https://img.icons8.com/color/48/discover.png',
-//     },
-// ];
-
-
 
 const CheckoutForm = ({ clientSecret, shippingAddress}) => {
     const stripe = useStripe();

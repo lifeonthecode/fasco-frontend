@@ -13,7 +13,7 @@ const ProductDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { product, loading } = useSelector((state) => state.product);
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector((state) => state.auth);
 
     useEffect(() => {
         dispatch(getSingleProduct(id))
@@ -31,72 +31,6 @@ const ProductDetails = () => {
         imageIndex: 0,
     });
 
-    // const productDetailsInfo = [
-    //     {
-    //         productId: id,
-    //         images: [
-    //             {
-    //                 id: 1,
-    //                 image: '/products/product_1.png'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 image: '/products/product_2.png'
-    //             },
-    //             {
-    //                 id: 3,
-    //                 image: '/products/product_3.png'
-    //             },
-    //             {
-    //                 id: 4,
-    //                 image: '/products/product_4.png'
-    //             },
-    //             {
-    //                 id: 5,
-    //                 image: '/products/product_5.png'
-    //             },
-    //             {
-    //                 id: 6,
-    //                 image: '/products/product_6.png'
-    //             },
-    //         ],
-    //         productName: `Product ${id}`,
-    //         price: 100,
-    //         sizes: [
-    //             {
-    //                 id: 1,
-    //                 size: 'S'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 size: 'M'
-    //             },
-    //             {
-    //                 id: 3,
-    //                 size: 'L'
-    //             },
-    //             {
-    //                 id: 4,
-    //                 size: 'XL'
-    //             },
-    //         ],
-    //         colors: [
-    //             {
-    //                 id: 1,
-    //                 color: 'blue'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 color: 'green'
-    //             },
-    //         ],
-    //         stock: 5,
-    //         discount: 33,
-    //         rating: 4.5
-    //     }
-
-
-    // ];
 
     // quantity increase handle 
     const handleIncrease = () => {
