@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchCarts } from "../../App/Features/Cart/cartSlice";
 import axiosInstance from "../../App/Api/axiosInstance";
-const stripePromise = loadStripe('pk_test_51RL3euHHyFADS5JCVtPLTwSJhPNY5agnDahywYLOflVu5kUdloXvCDGrc2moDP1BKFSCVO2cQTd4NrdjoakzUgYT00LoB2iTpV'); 
+const stripePromise = loadStripe('pk_test_51SEnTA2NUKgywCaMvzoRFfPAf8CUDHWOjKLoM8Cnn0gBaab9XCgGOJ9PNmslT1QBHMtWRKKQEwtG4tXMZHxl7JKL0016GPnbBT'); 
 const Checkout = () => {
 
     const dispatch = useDispatch();
